@@ -28,16 +28,17 @@ class account
 		QByteArray get_random_seed(void)const;
 	public:
 		account();
-		address_bundle get_payment_addr(void) const;
-		address_bundle get_consolidation_addr(void) const;
+        address_bundle get_payment_addr(quint32 index) const;
+        address_bundle get_payment_addr(void) const;
 		address_bundle get_publish_addr(void) const;
+
 		void next_payment_addr(void){last_index++;}
-		void next_consolidation_addr(void){last_mov_index++;}
+
 
 	private:
 		const Master_key master_;
 		quint32 last_index;
-		quint32 last_mov_index;
+
 		const QVector<quint32> publish_path;
 };
 

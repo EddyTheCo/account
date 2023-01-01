@@ -32,10 +32,10 @@ QByteArray account::get_random_seed(void)const{
 		quint32 value = QRandomGenerator::global()->generate();
 		buffer<<value;
 	}
-	return QByteArray::fromHex("20b5f5a1dc76bc385d27fe9de15d97c0f338ff1389ecae3f7c9bd748707e141e");
-	//return var;
+    //return QByteArray::fromHex("20b5f5a1dc76bc385d27fe9de15d97c0f338ff1389ecae3f7c9bd748707e141e");
+    return var;
 }
-account::account():master_(get_random_seed()),publish_path({44,4219,0,0,0}),last_index(0),last_mov_index(0)
+account::account():master_(get_random_seed()),publish_path({44,4219,0,0,0}),last_index(0)
 {
 }
 address_bundle account::get_payment_addr(void) const
@@ -45,12 +45,12 @@ address_bundle account::get_payment_addr(void) const
 	auto keys=master_.slip10_key_from_path(path);
 	return address_bundle(qed25519::create_keypair(keys.secret_key()));
 }
-address_bundle account::get_consolidation_addr(void) const
+address_bundle account::get_payment_addr(quint32 index) const
 {
-	QVector<quint32> path={44,4219,2,0};
-	path.push_back(last_mov_index);
-	auto keys=master_.slip10_key_from_path(path);
-	return address_bundle(qed25519::create_keypair(keys.secret_key()));
+    QVector<quint32> path={44,4219,1,0};
+    path.push_back(index);
+    auto keys=master_.slip10_key_from_path(path);
+    return address_bundle(qed25519::create_keypair(keys.secret_key()));
 }
 address_bundle account::get_publish_addr(void) const
 {
