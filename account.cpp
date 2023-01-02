@@ -1,6 +1,5 @@
 
 #include <QRandomGenerator>
-#include"encoding/qbech32.hpp"
 #include"crypto/qed25519.hpp"
 #include"account.hpp"
 #include <QCryptographicHash>

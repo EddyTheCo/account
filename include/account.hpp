@@ -1,5 +1,5 @@
 #pragma once
-
+#include"encoding/qbech32.hpp"
 #include"crypto/qslip10.hpp"
 #include"block/qblock.hpp"
 using namespace qcrypto;

@@ -40,10 +40,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(qed25519)
 
 target_link_libraries(account PUBLIC
-	qslip10 qblock
+        qslip10 qblock qbech32
 	)
 target_link_libraries(account PRIVATE
-	qed25519 qbech32
+        qed25519
 	)
 
 install(TARGETS account EXPORT accountTargets DESTINATION lib)
