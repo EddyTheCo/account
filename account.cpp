@@ -5,7 +5,7 @@
 #include <QCryptographicHash>
 
 address_bundle::address_bundle(const std::pair<QByteArray,QByteArray>& key_pair_m,QString hrp_m):key_pair(key_pair_m),
-	hrp(hrp_m), addr_hash(get_hash()), addr(get_address())
+    hrp(hrp_m), addr_hash(get_hash()), addr(get_address()), reference_count(0)
 { };
 
 
@@ -61,4 +61,78 @@ address_bundle account::get_publish_addr(void) const
 qblocks::signature address_bundle::sign(const QByteArray & message)const
 {
 	return qblocks::signature(qed25519::sign(key_pair,message));
+}
+std::shared_ptr<qblocks::Signature> address_bundle::signature(const QByteArray & message)const
+{
+    return std::shared_ptr<qblocks::Signature>
+            (new qblocks::Ed25519_Signature(qblocks::public_key(key_pair.first),
+                                   sign(message)));
+}
+std::shared_ptr<qblocks::Unlock> address_bundle::signature_unlock(const QByteArray & message)const
+{
+    return std::shared_ptr<qblocks::Unlock>(new qblocks::Signature_Unlock(signature(message)));
+}
+void address_bundle::consume_outputs(std::vector<Node_output> outs_,const quint64 amount_need_it,
+                                                                         qblocks::c_array& Inputs_Commitments, quint64& amount,
+                                                                         std::vector<std::shared_ptr<qblocks::Output>>& ret_outputs,
+                            std::vector<std::shared_ptr<qblocks::Input>>& inputs)
+{
+
+    const auto cday=QDateTime::currentDateTime().toSecsSinceEpoch();
+
+    while(((amount_need_it)?amount<amount_need_it:1)&&!outs_.empty())
+    {
+        const auto v=outs_.back();
+        if(!v.metadata().is_spent_&&v.output()->type_m==3)
+        {
+
+            const auto basic_output_=std::dynamic_pointer_cast<qblocks::Basic_Output>(v.output());
+
+            const auto  stor_unlock=basic_output_->get_unlock_(1);
+            quint64 ret_amount=0;
+            if(stor_unlock)
+            {
+                const auto sdruc=std::dynamic_pointer_cast<qblocks::Storage_Deposit_Return_Unlock_Condition>(stor_unlock);
+                ret_amount=sdruc->return_amount();
+                const auto ret_address=sdruc->return_address();
+                const auto retUnlcon=std::shared_ptr<qblocks::Unlock_Condition>(new qblocks::Address_Unlock_Condition(ret_address));
+                const auto retOut= std::shared_ptr<qblocks::Output>(new qblocks::Basic_Output(ret_amount,{retUnlcon},{},{}));
+                ret_outputs.push_back(retOut);
+            }
+            const auto expir=basic_output_->get_unlock_(3);
+            if(expir)
+            {
+                const auto expiration_cond=*(std::dynamic_pointer_cast<qblocks::Expiration_Unlock_Condition>(expir));
+                const auto unix_time=expiration_cond.unix_time();
+
+                if(cday+100>unix_time)
+                {
+                    outs_.pop_back();
+                    continue;
+                }
+            }
+            const auto time_lock=basic_output_->get_unlock_(2);
+            if(time_lock)
+            {
+                const auto time_lock_cond=*(std::dynamic_pointer_cast<qblocks::Timelock_Unlock_Condition>(time_lock));
+                const auto unix_time=time_lock_cond.unix_time();
+                if(cday<unix_time)
+                {
+                    outs_.pop_back();
+                    continue;
+                }
+
+            }
+
+            inputs.push_back(std::shared_ptr<qblocks::Input>(new qblocks::UTXO_Input(v.metadata().transaction_id_,
+                                                                                     v.metadata().output_index_)));
+            qblocks::c_array prevOutputSer;
+            prevOutputSer.from_object<qblocks::Output>(*(v.output()));
+            auto Inputs_Commitment1=QCryptographicHash::hash(prevOutputSer, QCryptographicHash::Blake2b_256);
+            Inputs_Commitments.append(Inputs_Commitment1);
+            amount+=basic_output_->amount()-ret_amount;
+            reference_count++;
+        }
+        outs_.pop_back();
+    }
 }
