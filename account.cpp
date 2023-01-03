@@ -5,7 +5,7 @@
 #include <QCryptographicHash>
 
 address_bundle::address_bundle(const std::pair<QByteArray,QByteArray>& key_pair_m,QString hrp_m):key_pair(key_pair_m),
-    hrp(hrp_m), addr_hash(get_hash()), addr(get_address()), reference_count(0)
+    hrp(hrp_m), addr_hash(get_hash()), addr(get_address()), reference_count_(0)
 { };
 
 
@@ -72,6 +72,18 @@ std::shared_ptr<qblocks::Unlock> address_bundle::signature_unlock(const QByteArr
 {
     return std::shared_ptr<qblocks::Unlock>(new qblocks::Signature_Unlock(signature(message)));
 }
+void address_bundle::create_unlocks(const QByteArray & message,std::vector<std::shared_ptr<qblocks::Unlock>>& unlocks)const
+{
+    if(reference_count_)
+    {
+        const quint16 reference_index=unlocks.size();
+        unlocks.push_back(signature_unlock(message));
+        for(auto i=0;i<reference_count_-1;i++)
+        {
+            unlocks.push_back(std::shared_ptr<qblocks::Unlock>(new qblocks::Reference_Unlock(reference_index)));
+        }
+    }
+}
 void address_bundle::consume_outputs(std::vector<Node_output> outs_,const quint64 amount_need_it,
                                                                          qblocks::c_array& Inputs_Commitments, quint64& amount,
                                                                          std::vector<std::shared_ptr<qblocks::Output>>& ret_outputs,
@@ -131,7 +143,7 @@ void address_bundle::consume_outputs(std::vector<Node_output> outs_,const quint6
             auto Inputs_Commitment1=QCryptographicHash::hash(prevOutputSer, QCryptographicHash::Blake2b_256);
             Inputs_Commitments.append(Inputs_Commitment1);
             amount+=basic_output_->amount()-ret_amount;
-            reference_count++;
+            reference_count_++;
         }
         outs_.pop_back();
     }

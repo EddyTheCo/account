@@ -18,15 +18,16 @@ public:
                          qblocks::c_array& Inputs_Commitments, quint64& amount,
                          std::vector<std::shared_ptr<qblocks::Output>>& ret_outputs,
                          std::vector<std::shared_ptr<qblocks::Input>>& inputs);
-
+    quint16 reference_count(void)const{return reference_count_;}
     qblocks::signature sign(const QByteArray & message)const;
     std::shared_ptr<qblocks::Signature> signature(const QByteArray & message)const;
     std::shared_ptr<qblocks::Unlock> signature_unlock(const QByteArray & message)const;
+    void create_unlocks(const QByteArray & message,std::vector<std::shared_ptr<qblocks::Unlock>>& unlocks)const;
 
 private:
 
     qblocks::c_array get_hash(void)const;
-    quint16 reference_count;
+    quint16 reference_count_;
     QString get_address(void)const;
 };
 class account
