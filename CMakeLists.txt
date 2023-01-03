@@ -25,6 +25,12 @@ FetchContent_Declare(
         GIT_TAG main
         )
 FetchContent_MakeAvailable(qblock)
+FetchContent_Declare(
+        qclient
+        GIT_REPOSITORY git@github.com:EddyTheCo/Qclient-IOTA.git
+        GIT_TAG main
+        )
+FetchContent_MakeAvailable(qclient)
 
 FetchContent_Declare(
 	qbech32
@@ -40,7 +46,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(qed25519)
 
 target_link_libraries(account PUBLIC
-        qslip10 qblock qbech32
+        qslip10  qbech32 qclient
 	)
 target_link_libraries(account PRIVATE
         qed25519
