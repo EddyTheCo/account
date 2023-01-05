@@ -114,14 +114,35 @@ void address_bundle::consume_outputs(std::vector<Node_output> outs_,const quint6
             const auto expir=basic_output_->get_unlock_(3);
             if(expir)
             {
-                const auto expiration_cond=*(std::dynamic_pointer_cast<qblocks::Expiration_Unlock_Condition>(expir));
-                const auto unix_time=expiration_cond.unix_time();
-
-                if(cday+100>unix_time)
+                const auto expiration_cond=std::dynamic_pointer_cast<qblocks::Expiration_Unlock_Condition>(expir);
+                const auto unix_time=expiration_cond->unix_time();
+                const auto ret_address=expiration_cond->return_address();
+                if(ret_address->type_m==0)
                 {
-                    outs_.pop_back();
-                    continue;
+                    const auto ret_addrs=std::dynamic_pointer_cast<qblocks::Ed25519_Address>(ret_address);
+                    if(ret_addrs->pubkeyhash()==addr_hash)
+                    {
+                        if(stor_unlock)
+                        {
+                            ret_outputs.pop_back();
+                            ret_amount=0;
+                        }
+                        if(cday<=unix_time)
+                        {
+                            outs_.pop_back();
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if(cday>unix_time)
+                        {
+                            outs_.pop_back();
+                            continue;
+                        }
+                    }
                 }
+
             }
             const auto time_lock=basic_output_->get_unlock_(2);
             if(time_lock)
