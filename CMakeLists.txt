@@ -66,8 +66,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(MyDesigns)
 
-target_link_libraries(account PRIVATE qslip10 qed25519 )
-target_link_libraries(account PUBLIC qaddr_bundle MyDesigns)
+target_link_libraries(account PRIVATE  qed25519 )
+target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns)
 
 target_compile_definitions(account
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
