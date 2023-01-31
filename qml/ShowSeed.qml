@@ -20,7 +20,7 @@ MyFrame
         MyTextField
         {
             id:seed_
-            text:Account.seed
+            tfield.text:Account.seed
             Layout.preferredWidth: 400
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -28,8 +28,8 @@ MyFrame
             Layout.minimumHeight: 45
             Layout.minimumWidth:100
             Layout.preferredHeight: 50
-            echoMode:TextInput.Password
-            readOnly:true
+            tfield.echoMode:TextInput.Password
+            tfield.readOnly:true
 
             ToolTip
             {

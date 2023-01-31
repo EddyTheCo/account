@@ -25,8 +25,8 @@ MyFrame
             Layout.minimumHeight: 45
             Layout.minimumWidth:100
             Layout.preferredHeight: 50
-            echoMode:TextInput.PasswordEchoOnEdit
-            onEditingFinished: Account.seed=seed_.text
+            tfield.echoMode:TextInput.PasswordEchoOnEdit
+            tfield.onEditingFinished: Account.seed=seed_.text
         }
 
 
