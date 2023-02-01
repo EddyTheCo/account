@@ -48,7 +48,7 @@ MyFrame
                 onExited: tooltip.visible=!tooltip.visible
                 onClicked:
                 {
-                    textEdit.text = seed_.text
+                    textEdit.text = seed_.tfield.text
                     textEdit.selectAll()
                     textEdit.copy()
                     root_.closed()
