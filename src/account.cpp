@@ -31,7 +31,7 @@ void Account::set_seed(QString seedstr)
 {
 
     auto var=QByteArray::fromHex(seedstr.toUtf8());
-    if(var.size()>32&&var!=seed_)
+    if(var.size()>=32&&var!=seed_)
     {
         seed_=var;
         emit seedChanged();
