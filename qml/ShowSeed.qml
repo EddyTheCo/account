@@ -40,7 +40,6 @@ MyFrame
                 textEdit.text = Account.seed
                 textEdit.selectAll()
                 textEdit.copy()
-                root_.closed()
             }
         }
     }
