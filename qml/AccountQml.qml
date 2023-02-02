@@ -9,11 +9,6 @@ MyFrame
     id:root_
     description: qsTr("Account settings")
 
-    Connections {
-        target: Account
-        function onSeedChanged() {root_.changed(); }
-    }
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -68,7 +63,6 @@ MyFrame
             Layout.alignment: Qt.AlignCenter
             visible:but_2.checked
         }
-
 
     }
 
