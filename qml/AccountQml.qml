@@ -9,8 +9,6 @@ MyFrame
     id:root_
     description: qsTr("Account settings")
 
-    signal changed()
-
     Connections {
         target: Account
         function onSeedChanged() {root_.changed(); }
@@ -56,10 +54,9 @@ MyFrame
             id:rseed_
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 250
+            Layout.maximumHeight: 200
             Layout.alignment: Qt.AlignCenter
             visible:but_1.checked
-            onClosed: () =>changed()
         }
 
         RestoreAccount
@@ -67,7 +64,7 @@ MyFrame
             id:raccou_
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 250
+            Layout.maximumHeight: 200
             Layout.alignment: Qt.AlignCenter
             visible:but_2.checked
         }
