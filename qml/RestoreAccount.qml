@@ -9,26 +9,21 @@ MyFrame
 {
     id:root_
     description: qsTr("Restore account")
-    ColumnLayout
+
+
+    MyTextArea
     {
-        anchors.fill: parent
-        spacing: 20
-
-        MyTextField
+        id:seed_
+        width:root_.width*0.95
+        height:root_.height*0.95
+        anchors.centerIn: root_
+        placeholderText:qsTr("seed")
+        tfield.onEditingFinished:
         {
-            id:seed_
-            placeholderText:qsTr("seed")
-            Layout.preferredWidth: 400
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumHeight: 75
-            Layout.minimumHeight: 45
-            Layout.minimumWidth:100
-            Layout.preferredHeight: 50
-            tfield.echoMode:TextInput.PasswordEchoOnEdit
-            tfield.onEditingFinished: Account.seed=seed_.text
+            Account.seed=seed_.tfield.text
         }
-
-
     }
+
+
+
 }
