@@ -17,10 +17,33 @@ MyFrame
         height:root_.height*0.95
         anchors.centerIn: root_
         tfield.text:Account.seed
-        tfield.selectByMouse:true
         tfield.readOnly:true
         tfield.wrapMode:Text.WrapAnywhere
 
+        ToolTip
+        {
+            id:tooltip
+            visible: false
+            text:qsTr("Copy")
+        }
+        TextEdit{
+            id: textEdit
+            visible: false
+        }
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled :true
+            onEntered: tooltip.visible=!tooltip.visible
+            onExited: tooltip.visible=!tooltip.visible
+            onClicked:
+            {
+                textEdit.text = Account.seed
+                textEdit.selectAll()
+                textEdit.copy()
+                root_.closed()
+            }
+        }
     }
+
 
 }
