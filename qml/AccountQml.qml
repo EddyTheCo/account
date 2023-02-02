@@ -19,7 +19,7 @@ MyFrame
     ColumnLayout
     {
         anchors.fill: parent
-        spacing: 20
+        spacing:1
 
 
         MyRadioButton
@@ -27,14 +27,11 @@ MyFrame
             id:but_1
             checked: true
             text:qsTr("New account")
-            Layout.preferredWidth: 200
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.maximumHeight: 75
-            Layout.maximumWidth: 300
+            Layout.maximumWidth: 75
             Layout.minimumHeight: 45
-            Layout.minimumWidth:150
-            Layout.preferredHeight: 50
             Layout.alignment: Qt.AlignLeft
 
         }
@@ -43,29 +40,24 @@ MyFrame
             id:but_2
             checked: false
             text:qsTr("Restore account")
-            Layout.preferredWidth: 200
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.maximumHeight: 75
-            Layout.maximumWidth: 300
+            Layout.maximumWidth: 75
             Layout.minimumHeight: 45
-            Layout.minimumWidth:150
-            Layout.preferredHeight: 50
             Layout.alignment: Qt.AlignLeft
+
         }
+
+
 
         ShowSeed
         {
             id:rseed_
-            Layout.preferredWidth: 300
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 150
-            Layout.maximumWidth: 400
-            Layout.minimumHeight: 100
-            Layout.minimumWidth:200
-            Layout.preferredHeight: 100
-            Layout.alignment: Qt.AlignHCenter
+            Layout.maximumHeight: 250
+            Layout.alignment: Qt.AlignCenter
             visible:but_1.checked
             onClosed: () =>changed()
         }
@@ -73,15 +65,10 @@ MyFrame
         RestoreAccount
         {
             id:raccou_
-            Layout.preferredWidth: 300
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 150
-            Layout.maximumWidth: 400
-            Layout.minimumHeight: 100
-            Layout.minimumWidth:200
-            Layout.preferredHeight: 100
-            Layout.alignment: Qt.AlignHCenter
+            Layout.maximumHeight: 250
+            Layout.alignment: Qt.AlignCenter
             visible:but_2.checked
         }
 
