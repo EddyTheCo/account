@@ -20,7 +20,7 @@ qt6_add_qml_module(account
     qml/ShowSeed.qml
     qml/window.qml
     RESOURCE_PREFIX
-     "/esthertech.com/imports"
+     "/esterVtech.com/imports"
     OUTPUT_TARGETS out_targets_var
     NO_IMPORT_SCAN
     IMPORTS MyDesigns
