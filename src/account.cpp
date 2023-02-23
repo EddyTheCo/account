@@ -18,7 +18,7 @@ Account::Account(quint32 coin):master_(QByteArray(32,0)),path_(QVector<quint32>{
 {
     set_random_seed();
     master_=Master_key(seed_);
-    connect(this,&Account::seedChanged,this,[=](){master_=Master_key(seed_);});
+
 }
 address_bundle Account::get_addr(const QVector<quint32>& subpath) const
 {
@@ -34,6 +34,7 @@ void Account::set_seed(QString seedstr)
     if(var.size()>=32&&var!=seed_)
     {
         seed_=var;
+        master_=Master_key(seed_);
         emit seedChanged();
     }
 }
