@@ -23,8 +23,10 @@ public:
     void set_seed(QString seedstr);
 
     address_bundle get_addr(const QVector<quint32>& subpath) const; //(0,0,0)
-    Q_INVOKABLE QString addr(const QVector<quint32> subpath)const{return get_addr(subpath).get_address<qblocks::Address::Ed25519_typ>();
-    };
+    Q_INVOKABLE QString addr(const QVector<quint32> subpath)const
+    {return get_addr(subpath).get_address<qblocks::Address::Ed25519_typ>().toHexString();}
+    Q_INVOKABLE QString addr_bech32(const QVector<quint32> subpath)const
+    {return get_addr(subpath).get_address_bech32<qblocks::Address::Ed25519_typ>();};
 signals:
     void seedChanged();
 private:
