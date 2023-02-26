@@ -14,17 +14,19 @@ void Account::set_random_seed(void){
 		buffer<<value;
     }
 }
-Account::Account(quint32 coin):master_(QByteArray(32,0)),path_(QVector<quint32>{44,coin})
+Master_key Account::master_=QByteArray(32,0);
+QVector<quint32> Account::path_={44,4219};
+QByteArray Account::seed_=QByteArray(32,0);
+Account::Account()
 {
     set_random_seed();
     master_=Master_key(seed_);
-
 }
-address_bundle Account::get_addr(const QVector<quint32>& subpath) const
+address_bundle Account::get_addr(const QVector<quint32>& subpath)
 {
-    QVector<quint32> full_path=path_;
-    full_path.append(subpath);
-    auto keys=master_.slip10_key_from_path(full_path);
+    QVector<quint32> fullpath=path_;
+    fullpath.append(subpath);
+    auto keys=master_.slip10_key_from_path(fullpath);
 	return address_bundle(qed25519::create_keypair(keys.secret_key()));
 }
 void Account::set_seed(QString seedstr)
