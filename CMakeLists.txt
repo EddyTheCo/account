@@ -18,7 +18,6 @@ qt6_add_qml_module(account
     qml/AccountQml.qml
     qml/RestoreAccount.qml
     qml/ShowSeed.qml
-    qml/window.qml
     RESOURCE_PREFIX
      "/esterVtech.com/imports"
     OUTPUT_TARGETS out_targets_var
