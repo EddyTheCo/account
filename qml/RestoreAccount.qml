@@ -16,7 +16,7 @@ MyFrame
         id:seed_
         width:root_.width*0.95
         height:root_.height*0.95
-        anchors.centerIn: root_
+        anchors.centerIn: parent
         placeholderText:qsTr("seed")
         tfield.onEditingFinished:
         {
