@@ -17,8 +17,10 @@ void Account::set_random_seed(void){
 Master_key Account::master_=QByteArray(32,0);
 QVector<quint32> Account::path_={44,4219};
 QByteArray Account::seed_=QByteArray(32,0);
+Account* Account::ptr_=nullptr;
 Account::Account()
 {
+    if(!ptr_)ptr_=this;
     set_random_seed();
     master_=Master_key(seed_);
 }

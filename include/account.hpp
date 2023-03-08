@@ -21,12 +21,12 @@ public:
     Account();
     QString seed(void)const{return QString(seed_.toHex());}
     void set_seed(QString seedstr);
-
+    static Account* ptr(void){return ptr_;}
     static address_bundle get_addr(const QVector<quint32>& subpath); //(0,0,0)
-    Q_INVOKABLE QString addr(const QVector<quint32> subpath)const
+    Q_INVOKABLE static QString addr(const QVector<quint32> subpath)
     {return get_addr(subpath).get_address<qblocks::Address::Ed25519_typ>().toHexString();}
-    Q_INVOKABLE QString addr_bech32(const QVector<quint32> subpath)const
-    {return get_addr(subpath).get_address_bech32<qblocks::Address::Ed25519_typ>();};
+    Q_INVOKABLE static QString addr_bech32(const QVector<quint32> subpath,QString hrp)
+    {return get_addr(subpath).get_address_bech32<qblocks::Address::Ed25519_typ>(hrp);};
     Q_INVOKABLE static void set_path(const QVector<quint32>& path_m){path_=path_m;}
 signals:
     void seedChanged();
@@ -35,5 +35,6 @@ private:
     static Master_key master_;
     static QByteArray seed_;
     static QVector<quint32> path_;
+    static Account* ptr_;
 };
 
