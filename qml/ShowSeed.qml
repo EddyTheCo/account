@@ -13,7 +13,7 @@ MyFrame
     {
         id:seed_
         width:root_.width*0.95
-        height:root_.height*0.95
+        height:root_.height*0.5
         anchors.centerIn: parent
         tfield.text:Account.seed
         tfield.readOnly:true

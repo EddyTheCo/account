@@ -12,21 +12,19 @@ MyFrame
     ColumnLayout
     {
         anchors.fill: parent
-        spacing:1
-
 
         MyRadioButton
         {
             id:but_1
             checked: true
             text:qsTr("New account")
+            Layout.maximumHeight: 75
+            Layout.maximumWidth: 200
+            Layout.preferredHeight: 35
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 75
-            Layout.maximumWidth: 75
-            Layout.minimumHeight: 45
+            Layout.preferredWidth: 100
             Layout.alignment: Qt.AlignLeft
-
         }
         MyRadioButton
         {
@@ -35,9 +33,10 @@ MyFrame
             text:qsTr("Restore account")
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredWidth: 100
             Layout.maximumHeight: 75
-            Layout.maximumWidth: 75
-            Layout.minimumHeight: 45
+            Layout.maximumWidth: 200
+            Layout.preferredHeight: 35
             Layout.alignment: Qt.AlignLeft
 
         }
@@ -49,7 +48,8 @@ MyFrame
             id:rseed_
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 200
+            Layout.maximumHeight: 250
+            Layout.minimumHeight: 100
             Layout.alignment: Qt.AlignCenter
             visible:but_1.checked
         }
@@ -59,7 +59,8 @@ MyFrame
             id:raccou_
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 200
+            Layout.maximumHeight: 250
+            Layout.minimumHeight: 100
             Layout.alignment: Qt.AlignCenter
             visible:but_2.checked
         }
