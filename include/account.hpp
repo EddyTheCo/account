@@ -18,10 +18,9 @@ class Account : public QObject
     QML_SINGLETON
 
 public:
-    Account();
+    Account(QObject *parent = nullptr);
     QString seed(void)const{return QString(seed_.toHex());}
     void set_seed(QString seedstr);
-    static Account* ptr(void){return ptr_;}
     static address_bundle get_addr(const QVector<quint32>& subpath); //(0,0,0)
     Q_INVOKABLE static QString addr(const QVector<quint32> subpath)
     {return get_addr(subpath).get_address<qblocks::Address::Ed25519_typ>().toHexString();}
@@ -35,6 +34,6 @@ private:
     static Master_key master_;
     static QByteArray seed_;
     static QVector<quint32> path_;
-    static Account* ptr_;
+
 };
 
