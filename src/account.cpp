@@ -8,19 +8,19 @@
 
 void Account::set_random_seed(void){
     auto buffer=QDataStream(&seed_,QIODevice::WriteOnly | QIODevice::Append);
+
 	for(auto i=0;i<8;i++)
 	{
 		quint32 value = QRandomGenerator::global()->generate();
 		buffer<<value;
     }
+
 }
 Master_key Account::master_=QByteArray(32,0);
 QVector<quint32> Account::path_={44,4219};
-QByteArray Account::seed_=QByteArray(32,0);
-Account* Account::ptr_=nullptr;
-Account::Account()
+QByteArray Account::seed_=QByteArray();
+Account::Account(QObject *parent):QObject(parent)
 {
-    if(!ptr_)ptr_=this;
     set_random_seed();
     master_=Master_key(seed_);
 }
