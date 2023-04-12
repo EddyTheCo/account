@@ -23,9 +23,9 @@ public:
     void set_seed(QString seedstr);
     static address_bundle get_addr(const QVector<quint32>& subpath); //(0,0,0)
     Q_INVOKABLE static QString addr(const QVector<quint32> subpath)
-    {return get_addr(subpath).get_address<qblocks::Address::Ed25519_typ>().toHexString();}
+    {return get_addr(subpath).get_address()->addr().toHexString();}
     Q_INVOKABLE static QString addr_bech32(const QVector<quint32> subpath,QString hrp)
-    {return get_addr(subpath).get_address_bech32<qblocks::Address::Ed25519_typ>(hrp);};
+    {return get_addr(subpath).get_address_bech32(hrp);};
     Q_INVOKABLE static void set_path(const QVector<quint32>& path_m){path_=path_m;}
 signals:
     void seedChanged();
