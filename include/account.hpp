@@ -2,6 +2,7 @@
 #include"qaddr_bundle.hpp"
 #include"crypto/qslip10.hpp"
 #include<QObject>
+#include<QJsonObject>
 #include<QString>
 #include<QByteArray>
 #include <QtQml/qqmlregistration.h>
@@ -27,6 +28,17 @@ public:
     Q_INVOKABLE static QString addr_bech32(const QVector<quint32> subpath,QString hrp)
     {return get_addr(subpath).get_address_bech32(hrp);};
     Q_INVOKABLE static void set_path(const QVector<quint32>& path_m){path_=path_m;}
+    Q_INVOKABLE static QJsonObject path_json(const QVector<quint32> subpath)
+    {
+        return get_addr(subpath).get_address()->get_Json();
+    };
+    Q_INVOKABLE static QJsonObject bech32_json(const QString &bech32addr)
+    {
+        auto addr=qencoding::qbech32::Iota::decode(bech32addr);
+        if(addr.second.size())
+        return qblocks::Address::from_(addr.second)->get_Json();
+        return QJsonObject();
+    };
 signals:
     void seedChanged();
 private:
