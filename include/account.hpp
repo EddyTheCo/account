@@ -39,6 +39,11 @@ public:
         return qblocks::Address::from_(addr.second)->get_Json();
         return QJsonObject();
     };
+    Q_INVOKABLE static QString json_bech32(const QJsonValue &json_addr,const QString& hrp)
+    {
+        const auto addr=qblocks::Address::from_(json_addr)->addr();
+        return qencoding::qbech32::Iota::encode(hrp,addr);
+    };
 signals:
     void seedChanged();
 private:
