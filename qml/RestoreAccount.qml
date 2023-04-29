@@ -2,26 +2,17 @@ import account
 import MyDesigns
 
 
-
-MyFrame
+MyTextArea
 {
-    id:root_
-    description: qsTr("Restore account")
-
-
-    MyTextArea
+    id:seed_
+    textarea.placeholderText: qsTr("Enter seed")
+    textarea.onEditingFinished:
     {
-        id:seed_
-        width:root_.width*0.95
-        height:root_.height*0.5
-        anchors.centerIn: parent
-        placeholderText:qsTr("seed")
-        tfield.onEditingFinished:
-        {
-            Account.seed=seed_.tfield.text
-        }
+        Account.seed=seed_.textarea.text
     }
-
-
-
+    textarea.focus: true
 }
+
+
+
+

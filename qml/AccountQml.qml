@@ -6,43 +6,41 @@ import account
 
 MyFrame
 {
-    id:root_
+    id:root
     description: qsTr("Account settings")
 
     ColumnLayout
     {
+        visible: (root.collapsed>0.7)
         anchors.fill: parent
-
-        MyRadioButton
+        GridLayout
         {
-            id:but_1
-            checked: true
-            text:qsTr("New account")
-            Layout.maximumHeight: 75
-            Layout.maximumWidth: 200
-            Layout.preferredHeight: 35
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: 100
-            Layout.alignment: Qt.AlignLeft
+            Layout.maximumWidth: 300
+
+            columns: parent.width > 200 ? 2 : 1
+            rows : parent.width > 200 ? 1 : 2
+            MyRadioButton
+            {
+                id:but_1
+                checked: true
+                text:qsTr("New")
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignLeft
+            }
+            MyRadioButton
+            {
+                id:but_2
+                checked: false
+                text:qsTr("Restore")
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignLeft
+            }
         }
-        MyRadioButton
-        {
-            id:but_2
-            checked: false
-            text:qsTr("Restore account")
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 100
-            Layout.maximumHeight: 75
-            Layout.maximumWidth: 200
-            Layout.preferredHeight: 35
-            Layout.alignment: Qt.AlignLeft
-
-        }
-
-
-
         ShowSeed
         {
             id:rseed_
