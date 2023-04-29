@@ -6,7 +6,9 @@
 #include<QString>
 #include<QByteArray>
 #include <QtQml/qqmlregistration.h>
+
 using namespace qiota;
+using namespace qiota::qblocks;
 using namespace qcrypto;
 
 class Account : public QObject
@@ -36,12 +38,12 @@ public:
     {
         auto addr=qencoding::qbech32::Iota::decode(bech32addr);
         if(addr.second.size())
-        return qblocks::Address::from_(addr.second)->get_Json();
+        return Address::from_array(addr.second)->get_Json();
         return QJsonObject();
     };
     Q_INVOKABLE static QString json_bech32(const QJsonValue &json_addr,const QString& hrp)
     {
-        const auto addr=qblocks::Address::from_(json_addr)->addr();
+        const auto addr=Address::from_(json_addr)->addr();
         return qencoding::qbech32::Iota::encode(hrp,addr);
     };
 signals:
