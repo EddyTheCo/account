@@ -41,20 +41,20 @@ include(FetchContent)
 FetchContent_Declare(
     qslip10
     GIT_REPOSITORY git@github.com:EddyTheCo/Qslip10.git
-    GIT_TAG main
+    GIT_TAG v0.0.1
 )
 FetchContent_MakeAvailable(qslip10)
 
 FetchContent_Declare(
     qaddr_bundle
     GIT_REPOSITORY git@github.com:EddyTheCo/QAddrBundle.git
-    GIT_TAG main
+    GIT_TAG v0.0.1
 )
 FetchContent_MakeAvailable(qaddr_bundle)
 FetchContent_Declare(
     qed25519
     GIT_REPOSITORY git@github.com:EddyTheCo/Qed25519.git
-    GIT_TAG main
+    GIT_TAG v0.0.1
 )
 FetchContent_MakeAvailable(qed25519)
 
