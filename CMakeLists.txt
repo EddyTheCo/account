@@ -52,7 +52,7 @@ target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOUR
 include(FetchContent)
 FetchContent_Declare(
 	qslip10
-	GIT_REPOSITORY git@github.com:EddyTheCo/Qslip10.git
+	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
 	GIT_TAG v0.0.1
 	FIND_PACKAGE_ARGS 0 CONFIG
 	)
