@@ -21,3 +21,4 @@ jobs:
     with:
       os: ${{ matrix.os }}
       sharedLib: ${{ matrix.sharedLib }}
+      qtModules: 'qtshadertools'  
