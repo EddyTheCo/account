@@ -47,7 +47,6 @@ if (Qt6_FOUND)
 
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
-	include(FetchContent)
 	FetchContent_Declare(
 		qslip10
 		GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
