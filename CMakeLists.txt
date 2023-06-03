@@ -36,8 +36,8 @@ if (Qt6_FOUND)
 		qml/AccountQml.qml
 		qml/RestoreAccount.qml
 		qml/ShowSeed.qml
-		RESOURCE_PREFIX
-		"/esterVtech.com/imports"
+                RESOURCE_PREFIX
+                "/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
 		${CMAKE_CURRENT_BINARY_DIR}/account
@@ -130,3 +130,6 @@ if(BUILD_DOCS)
 	include(${build_docs})
 endif()
 
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR}/)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
