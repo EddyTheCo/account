@@ -27,6 +27,10 @@ find_package(Qt6 COMPONENTS Core Gui Quick)
 
 if (Qt6_FOUND)
 	qt_standard_project_setup()
+	set(MODULE_BUILD SHARED)
+	if(NOT BUILD_SHARED_LIBS)
+		set(MODULE_BUILD STATIC)
+	endif(NOT BUILD_SHARED_LIBS)
 	qt6_add_qml_module(account
 		URI  account
 		VERSION 1.0
@@ -36,8 +40,8 @@ if (Qt6_FOUND)
 		qml/AccountQml.qml
 		qml/RestoreAccount.qml
 		qml/ShowSeed.qml
-                RESOURCE_PREFIX
-                "/esterVtech.com/imports"
+		RESOURCE_PREFIX
+		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
 		${CMAKE_CURRENT_BINARY_DIR}/account
