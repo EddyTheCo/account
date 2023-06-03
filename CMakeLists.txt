@@ -34,6 +34,7 @@ if (Qt6_FOUND)
 	qt6_add_qml_module(account
 		URI  account
 		VERSION 1.0
+		${MODULE_BUILD}
 		SOURCES
 		src/account.cpp include/account.hpp
 		QML_FILES
