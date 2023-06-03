@@ -25,6 +25,38 @@ include(GNUInstallDirs)
 
 find_package(Qt6 COMPONENTS Core Gui Quick)
 
+FetchContent_Declare(
+	qslip10
+	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qslip10)
+
+FetchContent_Declare(
+	qaddr_bundle
+	GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qaddr_bundle)
+FetchContent_Declare(
+	qed25519
+	GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qed25519)
+
+FetchContent_Declare(
+	MyDesigns
+	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(MyDesigns)
+
+
 if (Qt6_FOUND)
 	qt_standard_project_setup()
 	set(MODULE_BUILD SHARED)
@@ -52,37 +84,6 @@ if (Qt6_FOUND)
 
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
-	FetchContent_Declare(
-		qslip10
-		GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qslip10)
-
-	FetchContent_Declare(
-		qaddr_bundle
-		GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qaddr_bundle)
-	FetchContent_Declare(
-		qed25519
-		GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qed25519)
-
-	FetchContent_Declare(
-		MyDesigns
-		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(MyDesigns)
-
 	target_link_libraries(account PRIVATE  qed25519 )
 	target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns)
 
