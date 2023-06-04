@@ -59,14 +59,9 @@ FetchContent_MakeAvailable(MyDesigns)
 
 if (Qt6_FOUND)
 	qt_standard_project_setup()
-	set(MODULE_BUILD SHARED)
-	if(NOT BUILD_SHARED_LIBS)
-		set(MODULE_BUILD STATIC)
-	endif(NOT BUILD_SHARED_LIBS)
 	qt6_add_qml_module(account
 		URI  account
 		VERSION 1.0
-		${MODULE_BUILD}
 		SOURCES
 		src/account.cpp include/account.hpp
 		QML_FILES
