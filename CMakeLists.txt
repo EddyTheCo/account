@@ -13,7 +13,7 @@ version_from_git(
 	LOG       OFF
 	TIMESTAMP "%Y%m%d%H%M%S"
 	)
-project(IOTAQml VERSION ${VERSION} LANGUAGES CXX)
+project(IOTAQml VERSION ${VERSION} DESCRIPTION "Account QML module" LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -36,7 +36,7 @@ FetchContent_MakeAvailable(qslip10)
 FetchContent_Declare(
 	qaddr_bundle
 	GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
-	GIT_TAG v0.0.1
+	GIT_TAG v0.1.1
 	FIND_PACKAGE_ARGS 0 CONFIG
 	)
 FetchContent_MakeAvailable(qaddr_bundle)
