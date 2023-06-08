@@ -13,7 +13,7 @@ version_from_git(
 	LOG       OFF
 	TIMESTAMP "%Y%m%d%H%M%S"
 	)
-project(IOTAQml VERSION ${VERSION} LANGUAGES CXX)
+project(IOTAQml VERSION ${VERSION} DESCRIPTION "Account QML module" LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -24,6 +24,38 @@ include(GNUInstallDirs)
 
 
 find_package(Qt6 COMPONENTS Core Gui Quick)
+
+FetchContent_Declare(
+	qslip10
+	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qslip10)
+
+FetchContent_Declare(
+	qaddr_bundle
+	GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
+	GIT_TAG v0.1.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qaddr_bundle)
+FetchContent_Declare(
+	qed25519
+	GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(qed25519)
+
+FetchContent_Declare(
+	MyDesigns
+	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
+	GIT_TAG v0.0.1
+	FIND_PACKAGE_ARGS 0 CONFIG
+	)
+FetchContent_MakeAvailable(MyDesigns)
+
 
 if (Qt6_FOUND)
 	qt_standard_project_setup()
@@ -47,38 +79,6 @@ if (Qt6_FOUND)
 
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
-	include(FetchContent)
-	FetchContent_Declare(
-		qslip10
-		GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qslip10)
-
-	FetchContent_Declare(
-		qaddr_bundle
-		GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qaddr_bundle)
-	FetchContent_Declare(
-		qed25519
-		GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(qed25519)
-
-	FetchContent_Declare(
-		MyDesigns
-		GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-		GIT_TAG v0.0.1
-		FIND_PACKAGE_ARGS 0 CONFIG
-		)
-	FetchContent_MakeAvailable(MyDesigns)
-
 	target_link_libraries(account PRIVATE  qed25519 )
 	target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns)
 
@@ -130,3 +130,6 @@ if(BUILD_DOCS)
 	include(${build_docs})
 endif()
 
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR}/)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
