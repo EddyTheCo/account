@@ -7,11 +7,17 @@
 #include<QByteArray>
 #include <QtQml/qqmlregistration.h>
 
+#include <QtCore/QtGlobal>
+#if defined(WINDOWS_ACCOU)
+# define ACCOU_EXPORT Q_DECL_EXPORT
+#else
+#define ACCOU_EXPORT Q_DECL_IMPORT
+#endif
 using namespace qiota;
 using namespace qiota::qblocks;
 using namespace qcrypto;
 
-class Account : public QObject
+class ACCOU_EXPORT Account : public QObject
 {
 	Q_OBJECT
 
