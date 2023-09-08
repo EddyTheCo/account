@@ -101,6 +101,8 @@ if (Qt6_FOUND)
 	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake"
 		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
+		NO_SET_AND_CHECK_MACRO
+		NO_CHECK_REQUIRED_COMPONENTS_MACRO
 		)
 	write_basic_package_version_file(
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake"
