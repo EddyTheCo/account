@@ -13,7 +13,7 @@ version_from_git(
 	LOG       OFF
 	TIMESTAMP "%Y%m%d%H%M%S"
 	)
-project(IOTAQml VERSION ${VERSION} DESCRIPTION "Account QML module" LANGUAGES CXX)
+project(AccountQml VERSION ${VERSION} DESCRIPTION "Account QML module" LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -73,6 +73,7 @@ if (Qt6_FOUND)
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
 		${CMAKE_CURRENT_BINARY_DIR}/account
+		IMPORT_PATH ${QML_IMPORT_PATH}
 		)
 
 	target_link_libraries(account PUBLIC Qt6::Gui Qt6::Quick)
@@ -94,12 +95,12 @@ if (Qt6_FOUND)
 
 	install(EXPORT account-config
 		FILE accountTargets.cmake
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
 		)
 	include(CMakePackageConfigHelpers)
 	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake"
-		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
 		)
 	write_basic_package_version_file(
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake"
@@ -109,12 +110,13 @@ if (Qt6_FOUND)
 	install(FILES
 		${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake
 		${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
 		)
 	export(EXPORT account-config
 		FILE "${CMAKE_CURRENT_BINARY_DIR}/account-config.cmake"
 		)
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+		set(CPACK_PACKAGE_CONTACT "estervtech")
 		include(CTest)
 		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
 		if(USE_THREADS)
