@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.24)
 
 include(local_conf.cmake OPTIONAL)
 
@@ -28,8 +28,8 @@ find_package(Qt6 COMPONENTS Core Gui Quick)
 FetchContent_Declare(
 	qslip10
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-	GIT_TAG v0.0.1
-	FIND_PACKAGE_ARGS 0 CONFIG
+	GIT_TAG v0.0.2
+	FIND_PACKAGE_ARGS 0.0 CONFIG
 	)
 FetchContent_MakeAvailable(qslip10)
 
@@ -37,22 +37,22 @@ FetchContent_Declare(
 	qaddr_bundle
 	GIT_REPOSITORY https://github.com/EddyTheCo/QAddrBundle.git
         GIT_TAG v0.2.2
-	FIND_PACKAGE_ARGS 0 CONFIG
+	FIND_PACKAGE_ARGS 0.2 CONFIG
 	)
 FetchContent_MakeAvailable(qaddr_bundle)
 FetchContent_Declare(
 	qed25519
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
-	GIT_TAG v0.0.1
-	FIND_PACKAGE_ARGS 0 CONFIG
+	GIT_TAG v0.0.2
+	FIND_PACKAGE_ARGS 0.0 CONFIG
 	)
 FetchContent_MakeAvailable(qed25519)
 
 FetchContent_Declare(
 	MyDesigns
 	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-        GIT_TAG v0.2.2
-	FIND_PACKAGE_ARGS 0 CONFIG
+        GIT_TAG v0.2.3
+	FIND_PACKAGE_ARGS 0.2 CONFIG
 	)
 FetchContent_MakeAvailable(MyDesigns)
 
@@ -84,16 +84,15 @@ if (Qt6_FOUND)
 	target_link_libraries(account PRIVATE  qed25519 )
 	target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns)
 
-
 	install(TARGETS account ${out_targets_var}
-		EXPORT account-config
+		EXPORT accountTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/account
 		)
 
-	install(EXPORT account-config
+	install(EXPORT accountTargets
 		FILE accountTargets.cmake
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
 		)
@@ -101,8 +100,6 @@ if (Qt6_FOUND)
 	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake"
 		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
-		NO_SET_AND_CHECK_MACRO
-		NO_CHECK_REQUIRED_COMPONENTS_MACRO
 		)
 	write_basic_package_version_file(
 		"${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake"
@@ -114,8 +111,8 @@ if (Qt6_FOUND)
 		${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
 		)
-	export(EXPORT account-config
-		FILE "${CMAKE_CURRENT_BINARY_DIR}/account-config.cmake"
+	export(EXPORT accountTargets
+		FILE "${CMAKE_CURRENT_BINARY_DIR}/accountTargets.cmake"
 		)
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		set(CPACK_PACKAGE_CONTACT "estervtech")
