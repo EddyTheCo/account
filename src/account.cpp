@@ -5,7 +5,7 @@
 #include <QCryptographicHash>
 
 
-
+Account* Account::m_instance=nullptr;
 void Account::set_random_seed(void){
     auto buffer=QDataStream(&seed_,QIODevice::WriteOnly | QIODevice::Append);
 
@@ -16,11 +16,9 @@ void Account::set_random_seed(void){
     }
 
 }
-Master_key Account::master_=QByteArray(32,0);
-QVector<quint32> Account::path_={44,4219};
-QByteArray Account::seed_=QByteArray();
-Account::Account(QObject *parent):QObject(parent)
+Account::Account(QObject *parent):QObject(parent),master_(QByteArray(32,0)),path_({44,4219})
 {
+    if(!m_instance)m_instance=this;
     set_random_seed();
     master_=Master_key(seed_);
 }
