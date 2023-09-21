@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-include(local_conf.cmake OPTIONAL)
+include(${CMAKE_CURRENT_BINARY_DIR}/local_conf.cmake OPTIONAL)
 
 include(FetchContent)
 FetchContent_Declare(
