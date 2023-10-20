@@ -51,8 +51,8 @@ FetchContent_MakeAvailable(qed25519)
 FetchContent_Declare(
 	MyDesigns
 	GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-        GIT_TAG v0.2.3
-	FIND_PACKAGE_ARGS 0.2 CONFIG
+        GIT_TAG v0.3.1
+	FIND_PACKAGE_ARGS 0.3 CONFIG
 	)
 FetchContent_MakeAvailable(MyDesigns)
 
@@ -72,24 +72,33 @@ if (Qt6_FOUND)
 		"/esterVtech.com/imports"
 		OUTPUT_TARGETS out_targets_var
 		OUTPUT_DIRECTORY
-		${CMAKE_CURRENT_BINARY_DIR}/account
-		IMPORT_PATH ${QML_IMPORT_PATH}
+		${CMAKE_BINARY_DIR}/account
+		IMPORT_PATH ${CMAKE_BINARY_DIR}
 		)
 
 	target_link_libraries(account PUBLIC Qt6::Gui Qt6::Quick)
 
 	target_compile_definitions(account PRIVATE WINDOWS_ACCOU)
+	
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
-	target_link_libraries(account PRIVATE  qed25519 )
-	target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns)
 
-	install(TARGETS account ${out_targets_var}
+	target_link_libraries(account PRIVATE  qed25519 )
+
+	target_link_libraries(account PUBLIC qslip10 qaddr_bundle MyDesigns
+		$<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
+		)
+
+	install(TARGETS account accountplugin ${out_targets_var}
 		EXPORT accountTargets
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/account
+		)
+
+	install(DIRECTORY ${CMAKE_BINARY_DIR}/account/
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/account
 		)
 
 	install(EXPORT accountTargets
@@ -132,6 +141,3 @@ if(BUILD_DOCS)
 	include(${build_docs})
 endif()
 
-list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR}/)
-list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
