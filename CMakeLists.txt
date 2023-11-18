@@ -39,6 +39,22 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(qed25519)
 
+FetchContent_Declare(
+    qblock
+    GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
+    GIT_TAG improvements
+    FIND_PACKAGE_ARGS 0.3 CONFIG
+)
+FetchContent_MakeAvailable(qblock)
+
+FetchContent_Declare(
+        qbech32
+        GIT_REPOSITORY https://github.com/EddyTheCo/Qbech32.git
+        GIT_TAG v0.0.2
+        FIND_PACKAGE_ARGS 0.0 CONFIG
+        )
+FetchContent_MakeAvailable(qbech32)
+
 option(USE_QML "Create QML types and modules" ON)
 if(USE_QML)
     FetchContent_Declare(
@@ -90,9 +106,7 @@ target_link_libraries(account PUBLIC Qt6::Core)
 target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
 
-target_link_libraries(account PRIVATE  qed25519 )
-
-target_link_libraries(account PUBLIC qslip10)
+target_link_libraries(account PUBLIC qslip10 qblock qbech32 qed25519)
 
 install(TARGETS account
     EXPORT accountTargets

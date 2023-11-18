@@ -1,4 +1,3 @@
-
 #include <QRandomGenerator>
 #include"crypto/qed25519.hpp"
 #include"account.hpp"
@@ -11,6 +10,7 @@ Account* Account::instance()
     if (!m_instance) m_instance=new Account();
     return m_instance;
 }
+
 QByteArray Account::setRandomSeed(void){
     auto seed=QByteArray(32,0);
     auto buffer=QDataStream(&seed,QIODevice::WriteOnly | QIODevice::Append);

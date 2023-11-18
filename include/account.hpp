@@ -2,6 +2,7 @@
 #include"crypto/qslip10.hpp"
 #include"block/qaddresses.hpp"
 #include"encoding/qbech32.hpp"
+#include"crypto/qed25519.hpp"
 #include<QObject>
 #include<QJsonObject>
 #include<QString>
@@ -39,10 +40,9 @@ public:
     QString seed(void)const{return QString(seed_.toHex());}
     void setSeed(QString seedstr);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
-    std::shared_ptr<Address> getAddr(const QVector<quint32> subpath)
+    std::shared_ptr<const Address> getAddr(const QVector<quint32> subpath)
     {
-        return std::shared_ptr<Address>
-            (new Ed25519_Address(QCryptographicHash::hash(getKeys(subpath).first,QCryptographicHash::Blake2b_256)));
+        return Address::Ed25519(QCryptographicHash::hash(getKeys(subpath).first,QCryptographicHash::Blake2b_256));
     }
     c_array getAddrArray(const QVector<quint32> subpath)
     {
@@ -57,28 +57,17 @@ public:
     {
         return qencoding::qbech32::Iota::encode(hrp,getAddrArray(subpath));
     };
+
     Q_INVOKABLE void set_path(const QVector<quint32>& path_m){path_=path_m;}
     Q_INVOKABLE QJsonObject path_json(const QVector<quint32> subpath)
     {
         return getAddr(subpath)->get_Json();
     };
-    Q_INVOKABLE QJsonObject bech32Json(const QString &bech32addr)
-    {
-        auto addr=qencoding::qbech32::Iota::decode(bech32addr);
-        if(addr.second.size())
-            return Address::from_array(addr.second)->get_Json();
-        return QJsonObject();
-    };
-    Q_INVOKABLE QString jsonBech32(const QJsonValue &json_addr,const QString& hrp)
-    {
-        const auto addr=Address::from_(json_addr)->addr();
-        return qencoding::qbech32::Iota::encode(hrp,addr);
-    };
 signals:
     void seedChanged();
     void instanceChanged();
-private:
 
+private:
     Master_key master_;
     QByteArray seed_;
     QVector<quint32> path_;
