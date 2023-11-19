@@ -93,9 +93,13 @@ if (Qt6_FOUND)
     target_link_libraries(account PUBLIC MyDesigns
         $<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
     )
-install(TARGETS accountplugin ${out_targets_var}
+install(TARGETS ${out_targets_var}
     EXPORT accountTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+install(TARGETS accountplugin
+    EXPORT accountTargets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/account
 )
 install(DIRECTORY ${CMAKE_BINARY_DIR}/account/
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/account
