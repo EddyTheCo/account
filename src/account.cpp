@@ -1,7 +1,8 @@
-#include <QRandomGenerator>
-#include"crypto/qed25519.hpp"
 #include"account.hpp"
 #include <QCryptographicHash>
+#include <QRandomGenerator>
+
+namespace qiota{
 
 
 Account* Account::m_instance=nullptr;
@@ -11,34 +12,46 @@ Account* Account::instance()
     return m_instance;
 }
 
-QByteArray Account::setRandomSeed(void){
+QByteArray Account::setRandomSeed(quint8 byteNum){
+
     auto seed=QByteArray(32,0);
     auto buffer=QDataStream(&seed,QIODevice::WriteOnly | QIODevice::Append);
-    for(auto i=0;i<8;i++)
+    for(auto i=0;i<byteNum;i++)
     {
         quint32 value = QRandomGenerator::global()->generate();
         buffer<<value;
     }
     return seed;
 }
-void Account::setSeed(QString seedstr)
+void Account::set_path(const QVector<quint32>& path)
 {
-    auto var=QByteArray::fromHex(seedstr.toUtf8());
-    if(var.size()>=32&&seedstr!=Account::instance()->seed())
+    if(path!=m_path)
     {
-        emit seedChanged();
-        m_instance=new Account(Account::instance()->parent(),var);
+        m_instance=new Account(Account::instance()->parent(),m_seed);
+        emit instanceChanged();
         deleteLater();
     }
 }
-Account::Account(QObject *parent,QByteArray seed):QObject(parent),master_(seed),path_({44,4219})
+void Account::setSeed(QString seedstr)
 {
+    auto var=QByteArray::fromHex(seedstr.toUtf8());
+    if(var.size()>=32&&var!=m_seed)
+    {
+        m_instance=new Account(Account::instance()->parent(),var);
+        emit instanceChanged();
+        deleteLater();
+    }
+}
+Account::Account(QObject *parent,QByteArray seed):QObject(parent),m_master(seed),m_path({44,4219})
+{
+
 }
 std::pair<QByteArray,QByteArray> Account::getKeys(const QVector<quint32>& subpath)
 {
-    QVector<quint32> fullpath=path_;
+    QVector<quint32> fullpath=m_path;
     fullpath.append(subpath);
-    auto keys=master_.slip10_key_from_path(fullpath);
+    auto keys=m_master.slip10_key_from_path(fullpath);
     return qed25519::create_keypair(keys.secret_key());
 }
 
+}

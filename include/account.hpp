@@ -4,7 +4,6 @@
 #include"encoding/qbech32.hpp"
 #include"crypto/qed25519.hpp"
 #include<QObject>
-#include<QJsonObject>
 #include<QString>
 #include<QByteArray>
 
@@ -19,9 +18,12 @@
 #define ACCOU_EXPORT Q_DECL_IMPORT
 #endif
 
-using namespace qiota;
-using namespace qiota::qblocks;
+namespace qiota{
+
+
+using namespace qblocks;
 using namespace qcrypto;
+
 
 class ACCOU_EXPORT Account : public QObject
 {
@@ -33,11 +35,11 @@ class ACCOU_EXPORT Account : public QObject
     QML_ELEMENT
     QML_SINGLETON
 #endif
-    static QByteArray setRandomSeed(void);
+    static QByteArray setRandomSeed(quint8 byteNum=8);
     Account(QObject *parent = nullptr,QByteArray seed=setRandomSeed());
 public:
     static Account* instance();
-    QString seed(void)const{return QString(seed_.toHex());}
+    QString seed(void)const{return QString(m_seed.toHex());}
     void setSeed(QString seedstr);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
     std::shared_ptr<const Address> getAddr(const QVector<quint32> subpath)
@@ -58,20 +60,17 @@ public:
         return qencoding::qbech32::Iota::encode(hrp,getAddrArray(subpath));
     };
 
-    Q_INVOKABLE void set_path(const QVector<quint32>& path_m){path_=path_m;}
-    Q_INVOKABLE QJsonObject path_json(const QVector<quint32> subpath)
-    {
-        return getAddr(subpath)->get_Json();
-    };
+    Q_INVOKABLE void set_path(const QVector<quint32>& path);
+
 signals:
-    void seedChanged();
     void instanceChanged();
 
 private:
-    Master_key master_;
-    QByteArray seed_;
-    QVector<quint32> path_;
+    qcrypto::Master_key m_master;
+    QByteArray m_seed;
+    QVector<quint32> m_path;
     static Account * m_instance;
 
 };
 
+};
