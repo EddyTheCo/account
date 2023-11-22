@@ -23,13 +23,12 @@ QByteArray Account::setRandomSeed(quint8 byteNum){
     }
     return seed;
 }
-void Account::set_path(const QVector<quint32>& path)
+void Account::setPath(const QVector<quint32>& path)
 {
     if(path!=m_path)
     {
-        m_instance=new Account(Account::instance()->parent(),m_seed);
-        emit instanceChanged();
-        deleteLater();
+        m_path=path;
+        emit Changed();
     }
 }
 void Account::setSeed(QString seedstr)
@@ -37,9 +36,9 @@ void Account::setSeed(QString seedstr)
     auto var=QByteArray::fromHex(seedstr.toUtf8());
     if(var.size()>=32&&var!=m_seed)
     {
-        m_instance=new Account(Account::instance()->parent(),var);
-        emit instanceChanged();
-        deleteLater();
+        m_seed=var;
+        m_master=Master_key(m_seed);
+        emit Changed();
     }
 }
 Account::Account(QObject *parent,QByteArray seed):QObject(parent),m_master(seed),m_path({44,4219})

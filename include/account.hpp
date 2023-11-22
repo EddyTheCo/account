@@ -41,6 +41,7 @@ public:
     static Account* instance();
     QString seed(void)const{return QString(m_seed.toHex());}
     void setSeed(QString seedstr);
+    void setPath(const QVector<quint32>& path);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
     std::shared_ptr<const Address> getAddr(const QVector<quint32> subpath)
     {
@@ -60,10 +61,10 @@ public:
         return qencoding::qbech32::Iota::encode(hrp,getAddrArray(subpath));
     };
 
-    Q_INVOKABLE void set_path(const QVector<quint32>& path);
+
 
 signals:
-    void instanceChanged();
+    void Changed();
 
 private:
     qcrypto::Master_key m_master;
