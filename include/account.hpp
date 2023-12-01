@@ -30,8 +30,6 @@ class ACCOU_EXPORT Account : public QObject
 
     Q_OBJECT
 #if defined(USE_QML)
-    Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY seedChanged)
-    Q_PROPERTY(Account  instance READ instance NOTIFY instanceChanged)
     QML_ELEMENT
     QML_SINGLETON
 #endif
@@ -39,9 +37,8 @@ class ACCOU_EXPORT Account : public QObject
     Account(QObject *parent = nullptr,QByteArray seed=setRandomSeed());
 public:
     static Account* instance();
-    QString seed(void)const{return QString(m_seed.toHex());}
-    void setSeed(QString seedstr);
-    void setPath(const QVector<quint32>& path);
+    Q_INVOKABLE void setSeed(QString seedstr);
+    Q_INVOKABLE void setPath(const QVector<quint32>& path);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
     std::shared_ptr<const Address> getAddr(const QVector<quint32> subpath)
     {
