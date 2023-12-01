@@ -8,7 +8,7 @@
 #include<QByteArray>
 
 #if defined(USE_QML)
-#include <QtQml/qqmlregistration.h>
+#include<QtQml>
 #endif
 
 #include <QtCore/QtGlobal>
@@ -30,6 +30,7 @@ class ACCOU_EXPORT Account : public QObject
 
     Q_OBJECT
 #if defined(USE_QML)
+    Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY Changed)
     QML_ELEMENT
     QML_SINGLETON
 #endif
@@ -37,6 +38,13 @@ class ACCOU_EXPORT Account : public QObject
     Account(QObject *parent = nullptr,QByteArray seed=setRandomSeed());
 public:
     static Account* instance();
+#if defined(USE_QML)
+    static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    {
+        return instance();
+    }
+#endif
+    QString seed(void)const{return QString(m_seed.toHex());}
     Q_INVOKABLE void setSeed(QString seedstr);
     Q_INVOKABLE void setPath(const QVector<quint32>& path);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)

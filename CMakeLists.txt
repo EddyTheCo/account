@@ -77,7 +77,7 @@ if (Qt6_FOUND)
             URI  account
             VERSION 1.0
             QML_FILES
-            qml/AccountQml.qml
+            qml/AccountSettings.qml
             qml/RestoreAccount.qml
             qml/ShowSeed.qml
             RESOURCE_PREFIX
