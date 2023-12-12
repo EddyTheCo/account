@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
+option(USE_QML "Create QML types and modules" ON)
 include(${CMAKE_CURRENT_BINARY_DIR}/local_conf.cmake OPTIONAL)
 
 include(FetchContent)
@@ -13,7 +14,7 @@ version_from_git(
     LOG       OFF
     TIMESTAMP "%Y%m%d%H%M%S"
 )
-project(AccountQml VERSION ${VERSION} DESCRIPTION "Account QML module" LANGUAGES CXX)
+project(IotaAccount VERSION ${VERSION} DESCRIPTION "Iota account methods " LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -21,7 +22,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
-
 
 FetchContent_Declare(
     qslip10
@@ -48,23 +48,23 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(qblock)
 
 FetchContent_Declare(
-        qbech32
-        GIT_REPOSITORY https://github.com/EddyTheCo/Qbech32.git
-        GIT_TAG v0.0.2
-        FIND_PACKAGE_ARGS 0.0 CONFIG
-        )
+    qbech32
+    GIT_REPOSITORY https://github.com/EddyTheCo/Qbech32.git
+    GIT_TAG v0.0.2
+    FIND_PACKAGE_ARGS 0.0 CONFIG
+)
 FetchContent_MakeAvailable(qbech32)
 
-option(USE_QML "Create QML types and modules" ON)
+
 if(USE_QML)
     FetchContent_Declare(
-        MyDesigns
+        EstervDesigns
         GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-        GIT_TAG v0.3.1
-        FIND_PACKAGE_ARGS 0.3 CONFIG
+        GIT_TAG v1.0.0
+        FIND_PACKAGE_ARGS 1.0 CONFIG
     )
-    FetchContent_MakeAvailable(MyDesigns)
-    find_package(Qt6 COMPONENTS Core Gui Quick)
+FetchContent_MakeAvailable(EstervDesigns)
+find_package(Qt6 COMPONENTS Core Gui Quick)
 else()
     find_package(Qt6 COMPONENTS Core)
 endif()
@@ -74,74 +74,88 @@ if (Qt6_FOUND)
     add_library(account src/account.cpp include/account.hpp)
     if(USE_QML)
         qt6_add_qml_module(account
-            URI  account
+            URI  Esterv.Iota.Account
             VERSION 1.0
             QML_FILES
-            qml/AccountSettings.qml
-            qml/RestoreAccount.qml
-            qml/ShowSeed.qml
+            "qml/AccountSettings.qml"
+            "qml/RestoreAccount.qml"
+            "qml/ShowSeed.qml"
             RESOURCE_PREFIX
             "/esterVtech.com/imports"
             OUTPUT_TARGETS out_targets_var
             OUTPUT_DIRECTORY
-            ${CMAKE_BINARY_DIR}/account
-            IMPORT_PATH ${CMAKE_BINARY_DIR}
+            ${CMAKE_BINARY_DIR}/Esterv/Iota/Account
+            IMPORT_PATH ${CMAKE_BINARY_DIR}  ${CMAKE_INSTALL_LIBDIR}
         )
+
+
+    add_library(${PROJECT_NAME}::accountplugin ALIAS accountplugin)
 
     target_link_libraries(account PUBLIC Qt6::Gui Qt6::Quick)
     target_compile_definitions(account PRIVATE WINDOWS_ACCOU USE_QML)
-    target_link_libraries(account PUBLIC MyDesigns
-        $<$<STREQUAL:$<TARGET_PROPERTY:MyDesigns,TYPE>,STATIC_LIBRARY>:MyDesignsplugin>
+    target_link_libraries(account PUBLIC EstervDesigns::SimpleStyle EstervDesigns::customControls
+        $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
+        $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>
     )
 install(TARGETS ${out_targets_var}
-    EXPORT accountTargets
+    EXPORT ${PROJECT_NAME}-config
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT account
+)
+install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/Iota/Account
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/Iota
+    COMPONENT account
 )
 install(TARGETS accountplugin
-    EXPORT accountTargets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/account
+    EXPORT ${PROJECT_NAME}-config
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/Iota/Account
+    COMPONENT account
 )
-install(DIRECTORY ${CMAKE_BINARY_DIR}/account/
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/QMLPlugins/account
-)
+
 endif(USE_QML)
+
+add_library(${PROJECT_NAME}::account ALIAS account)
 target_link_libraries(account PUBLIC Qt6::Core)
 
 target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/account>")
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
 target_link_libraries(account PUBLIC qslip10 qblock qbech32 qed25519)
 
 install(TARGETS account
-    EXPORT accountTargets
+    EXPORT ${PROJECT_NAME}-config
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT account
 )
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/account
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}
+    COMPONENT account
 )
 
-install(EXPORT accountTargets
-    FILE accountTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
+install(EXPORT ${PROJECT_NAME}-config
+    FILE ${PROJECT_NAME}-config.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+    NAMESPACE ${PROJECT_NAME}::
+    COMPONENT ${PROJECT_NAME}
 )
 include(CMakePackageConfigHelpers)
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
-)
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+        )
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake"
-    VERSION ${VERSION}
-    COMPATIBILITY SameMajorVersion
-)
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        VERSION ${VERSION}
+        COMPATIBILITY SameMajorVersion
+        )
 install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/accountConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/accountConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/account
-)
-export(EXPORT accountTargets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/accountTargets.cmake"
-)
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+        )
+export(EXPORT ${PROJECT_NAME}-config
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+        )
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CPACK_PACKAGE_CONTACT "estervtech")
     include(CTest)

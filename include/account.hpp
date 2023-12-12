@@ -1,11 +1,12 @@
 #pragma once
-#include"crypto/qslip10.hpp"
-#include"block/qaddresses.hpp"
-#include"encoding/qbech32.hpp"
-#include"crypto/qed25519.hpp"
 #include<QObject>
 #include<QString>
 #include<QByteArray>
+
+#include"crypto/qslip10.hpp"
+#include"block/qaddresses.hpp"
+#include"encoding/qbech32.hpp"
+
 
 #if defined(USE_QML)
 #include<QtQml>

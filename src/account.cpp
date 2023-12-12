@@ -1,6 +1,7 @@
 #include"account.hpp"
 #include <QCryptographicHash>
 #include <QRandomGenerator>
+#include"crypto/qed25519.hpp"
 
 namespace qiota{
 
