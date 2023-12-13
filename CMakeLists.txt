@@ -17,7 +17,7 @@ version_from_git(
 project(IotaAccount VERSION ${VERSION} DESCRIPTION "Iota account methods " LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -78,7 +78,6 @@ if (Qt6_FOUND)
             VERSION 1.0
             QML_FILES
             "qml/AccountSettings.qml"
-            "qml/RestoreAccount.qml"
             "qml/ShowSeed.qml"
             RESOURCE_PREFIX
             "/esterVtech.com/imports"
@@ -157,6 +156,7 @@ export(EXPORT ${PROJECT_NAME}-config
         FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
         )
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    add_subdirectory(examples)
     set(CPACK_PACKAGE_CONTACT "estervtech")
     include(CTest)
     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")

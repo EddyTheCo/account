@@ -1,68 +1,107 @@
 import QtQuick.Layouts
+import QtQuick.Controls
 import QtQuick
-import MyDesigns
-import account
+import Esterv.Iota.Account
+import Esterv.Styles.Simple
 
 
-MyFrame
+ColumnLayout
 {
-    id:root
-    description: qsTr("Account settings")
-
-    ColumnLayout
+    id:control
+    property bool advancemode:false
+    RowLayout
     {
-        visible: (root.collapsed>0.7)
-        anchors.fill: parent
-        GridLayout
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        spacing: 10
+        Label
         {
+            text:qsTr("Account settings")
+            elide:Text.ElideRight
+            horizontalAlignment: TextEdit.AlignLeft
+            verticalAlignment: TextEdit.AlignVCenter
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumWidth: 300
-
-            columns: parent.width > 200 ? 2 : 1
-            rows : parent.width > 200 ? 1 : 2
-            MyRadioButton
-            {
-                id:but_1
-                checked: true
-                text:qsTr("New")
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignLeft
-            }
-            MyRadioButton
-            {
-                id:but_2
-                checked: false
-                text:qsTr("Restore")
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignLeft
-            }
         }
-        ShowSeed
-        {
-            id:rseed_
+        TabBar {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumHeight: 250
-            Layout.minimumHeight: 100
-            Layout.alignment: Qt.AlignCenter
-            visible:but_1.checked
-        }
+            Layout.maximumWidth: 250
+            TabButton {
+                text: "Basic"
+                onClicked:control.advancemode=false;
 
-        RestoreAccount
-        {
-            id:raccou_
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.maximumHeight: 250
-            Layout.minimumHeight: 100
-            Layout.alignment: Qt.AlignCenter
-            visible:but_2.checked
+            }
+            TabButton {
+                text: "Advanced"
+                onClicked:control.advancemode=true
+
+            }
         }
 
     }
+    Frame
+    {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        ColumnLayout
+        {
+            anchors.fill: parent
+            RowLayout
+            {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                visible: control.advancemode
+                Label
+                {
+                    text:qsTr("Coin type:")
+                }
+                SpinBox {
+                    value: Account.path[1]
+                    from:0
+                    to: 429496729 //fix this
+                    onValueChanged: Account.path[1]=value;
+                }
+            }
 
+            RowLayout
+            {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 400
+                Label
+                {
+                    text:qsTr("Seed")
+                    elide:Text.ElideRight
+                    Layout.fillWidth: true
+                }
+
+                TabBar {
+                    id:showorrestore
+                    property bool restore:false
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 250
+
+                    TabButton {
+                        text: qsTr("Show")
+                        onClicked: showorrestore.restore=false;
+                    }
+                    TabButton {
+                        text: qsTr("Restore")
+                        onClicked: showorrestore.restore=true;
+
+                    }
+                }
+            }
+            ShowSeed
+            {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.minimumHeight: 50
+                Layout.maximumHeight: 200
+                Layout.maximumWidth: 400
+                Layout.alignment: Qt.AlignLeft || Qt.AlignVCenter
+                readOnly:!showorrestore.restore
+            }
+        }
+    }
 }
+
+

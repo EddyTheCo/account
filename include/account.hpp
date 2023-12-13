@@ -28,14 +28,19 @@ using namespace qcrypto;
 
 class ACCOU_EXPORT Account : public QObject
 {
+    qcrypto::Master_key m_master;
+    QByteArray m_seed;
+    QVector<quint32> m_path;
+    static Account * m_instance;
 
     Q_OBJECT
 #if defined(USE_QML)
     Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY Changed)
+    Q_PROPERTY(QVector<quint32> path MEMBER m_path NOTIFY Changed)
     QML_ELEMENT
     QML_SINGLETON
 #endif
-    static QByteArray setRandomSeed(quint8 byteNum=8);
+    static QByteArray setRandomSeed(quint8 byte4Num=8);
     Account(QObject *parent = nullptr,QByteArray seed=setRandomSeed());
 public:
     static Account* instance();
@@ -67,16 +72,9 @@ public:
         return qencoding::qbech32::Iota::encode(hrp,getAddrArray(subpath));
     };
 
-
-
 signals:
     void Changed();
 
-private:
-    qcrypto::Master_key m_master;
-    QByteArray m_seed;
-    QVector<quint32> m_path;
-    static Account * m_instance;
 
 };
 

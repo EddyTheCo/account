@@ -13,12 +13,13 @@ Account* Account::instance()
     return m_instance;
 }
 
-QByteArray Account::setRandomSeed(quint8 byteNum){
-
-    auto seed=QByteArray(32,0);
+QByteArray Account::setRandomSeed(quint8 byte4Num){
+    QByteArray seed;
     auto buffer=QDataStream(&seed,QIODevice::WriteOnly | QIODevice::Append);
-    for(auto i=0;i<byteNum;i++)
+
+    for(auto i=0;i<byte4Num;i++)
     {
+
         quint32 value = QRandomGenerator::global()->generate();
         buffer<<value;
     }
@@ -42,7 +43,7 @@ void Account::setSeed(QString seedstr)
         emit Changed();
     }
 }
-Account::Account(QObject *parent,QByteArray seed):QObject(parent),m_master(seed),m_path({44,4219})
+Account::Account(QObject *parent,QByteArray seed):QObject(parent),m_seed(seed),m_master(seed),m_path({44,4219})
 {
 
 }

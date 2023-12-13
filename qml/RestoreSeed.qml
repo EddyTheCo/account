@@ -7,13 +7,11 @@ import Esterv.Styles.Simple
 TextArea
 {
     id:seed_
-    text:Account.seed
+
+    focus: true
     wrapMode:Text.WrapAnywhere
-    onEditingFinished:
-    {
-        Account.seed=seed_.text
-    }
 }
+
 
 
 
