@@ -25,7 +25,7 @@ include(GNUInstallDirs)
 FetchContent_Declare(
         QBip39
         GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
-        GIT_TAG explain
+        GIT_TAG develop
         FIND_PACKAGE_ARGS 0.1 CONFIG
         )
 FetchContent_MakeAvailable(QBip39)
