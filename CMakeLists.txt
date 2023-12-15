@@ -67,7 +67,7 @@ if(USE_QML)
     FetchContent_Declare(
         EstervDesigns
         GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-        GIT_TAG v1.0.0
+        GIT_TAG develop
         FIND_PACKAGE_ARGS 1.0 CONFIG
     )
 FetchContent_MakeAvailable(EstervDesigns)
@@ -98,9 +98,9 @@ if (Qt6_FOUND)
 
     target_link_libraries(account PUBLIC Qt6::Gui Qt6::Quick)
     target_compile_definitions(account PRIVATE WINDOWS_ACCOU USE_QML)
-    target_link_libraries(account PUBLIC EstervDesigns::SimpleStyle EstervDesigns::customControls
+    target_link_libraries(account PUBLIC EstervDesigns::SimpleStyle EstervDesigns::CustomControls
         $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
-        $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::customControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::customControlsplugin>
+        $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>
     )
 install(TARGETS ${out_targets_var}
     EXPORT ${PROJECT_NAME}-config
