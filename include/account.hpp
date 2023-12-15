@@ -32,16 +32,18 @@ class ACCOU_EXPORT Account : public QObject
     QByteArray m_seed;
     QVector<quint32> m_path;
     static Account * m_instance;
-
+    QString m_sentence;
+    bool m_mnemonicMode;
     Q_OBJECT
 #if defined(USE_QML)
-    Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY Changed)
-    Q_PROPERTY(QVector<quint32> path MEMBER m_path NOTIFY Changed)
+    Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY changed)
+    Q_PROPERTY(bool  mnmonicMode MEMBER m_mnemonicMode NOTIFY modeChanged)
+    Q_PROPERTY(QVector<quint32> path MEMBER m_path NOTIFY changed)
     QML_ELEMENT
     QML_SINGLETON
 #endif
-    static QByteArray setRandomSeed(quint8 byte4Num=8);
-    Account(QObject *parent = nullptr,QByteArray seed=setRandomSeed());
+    static std::pair<QByteArray,QString> setRandomSeed();
+    Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
 public:
     static Account* instance();
 #if defined(USE_QML)
@@ -50,7 +52,7 @@ public:
         return instance();
     }
 #endif
-    QString seed(void)const{return QString(m_seed.toHex());}
+    QString seed(void)const{return (m_mnemonicMode)?m_sentence:QString(m_seed.toHex());}
     Q_INVOKABLE void setSeed(QString seedstr);
     Q_INVOKABLE void setPath(const QVector<quint32>& path);
     std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
@@ -73,8 +75,8 @@ public:
     };
 
 signals:
-    void Changed();
-
+    void changed();
+    void modeChanged();
 
 };
 

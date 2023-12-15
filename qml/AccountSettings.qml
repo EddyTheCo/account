@@ -22,20 +22,18 @@ ColumnLayout
             verticalAlignment: TextEdit.AlignVCenter
             Layout.fillWidth: true
         }
-        TabBar {
-            Layout.fillWidth: true
-            Layout.maximumWidth: 250
-            TabButton {
-                text: "Basic"
-                onClicked:control.advancemode=false;
-
+        RoundButton
+        {
+            text: (control.advancemode)?qsTr("Advanced"):qsTr("Basic")
+            onClicked:
+            {
+                control.advancemode=!control.advancemode;
+                Account.mnmonicMode=!control.advancemode;
+                seed_.text=showorrestore.restore?"":Account.seed;
             }
-            TabButton {
-                text: "Advanced"
-                onClicked:control.advancemode=true
-
-            }
+            flat:true
         }
+
 
     }
     Frame
@@ -65,10 +63,9 @@ ColumnLayout
             RowLayout
             {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 400
                 Label
                 {
-                    text:qsTr("Seed")
+                    text:control.advancemode?qsTr("Seed"):qsTr("Mnemonic sentence")
                     elide:Text.ElideRight
                     Layout.fillWidth: true
                 }
@@ -77,28 +74,45 @@ ColumnLayout
                     id:showorrestore
                     property bool restore:false
                     Layout.fillWidth: true
-                    Layout.maximumWidth: 250
 
                     TabButton {
-                        text: qsTr("Show")
-                        onClicked: showorrestore.restore=false;
+                        text: qsTr("Current")
+                        onClicked:
+                        {
+                            showorrestore.restore=false;
+                            seed_.text=Account.seed;
+                        }
                     }
                     TabButton {
                         text: qsTr("Restore")
-                        onClicked: showorrestore.restore=true;
+                        onClicked:
+                        {
+
+                            showorrestore.restore=true;
+                            seed_.text="";
+                        }
 
                     }
                 }
             }
-            ShowSeed
+            TextArea
             {
+                id:seed_
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 50
-                Layout.maximumHeight: 200
-                Layout.maximumWidth: 400
+                Layout.minimumWidth:  100
                 Layout.alignment: Qt.AlignLeft || Qt.AlignVCenter
                 readOnly:!showorrestore.restore
+
+                wrapMode:Text.WrapAnywhere
+                inputMethodHints:Qt.ImhSensitiveData
+                text:Account.seed
+                onEditingFinished:
+                {
+                    Account.seed=seed_.text
+                }
+                placeholderText: control.advancemode?qsTr("e2f88a043776c828063..."):qsTr("ozone drill grab fiber ...")
             }
         }
     }

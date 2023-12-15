@@ -11,6 +11,12 @@ ApplicationWindow {
     visible: true
     id:window
 
+    Connections {
+            target: Account
+            function onChanged() {
+                addressmodel.clear();
+            }
+        }
     background:Rectangle
     {
         color:Style.backColor1
@@ -73,7 +79,6 @@ ApplicationWindow {
                 required property int addressindex
                 property var vec:[accountnumber.value,0,addressindex];
                 text: Account.getAddrBech32(vec,hrp.currentText)
-                horizontalAlignment: TextEdit.AlignHCenter
                 popWidth:275
                 popHeight:400
                 width:listview.width

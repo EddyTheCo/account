@@ -2,6 +2,7 @@
 #include <QCryptographicHash>
 #include <QRandomGenerator>
 #include"crypto/qed25519.hpp"
+#include"crypto/qbip39.hpp"
 
 namespace qiota{
 
@@ -13,37 +14,55 @@ Account* Account::instance()
     return m_instance;
 }
 
-QByteArray Account::setRandomSeed(quint8 byte4Num){
-    QByteArray seed;
-    auto buffer=QDataStream(&seed,QIODevice::WriteOnly | QIODevice::Append);
-
-    for(auto i=0;i<byte4Num;i++)
-    {
-
-        quint32 value = QRandomGenerator::global()->generate();
-        buffer<<value;
-    }
-    return seed;
-}
 void Account::setPath(const QVector<quint32>& path)
 {
     if(path!=m_path)
     {
         m_path=path;
-        emit Changed();
+        emit changed();
     }
 }
 void Account::setSeed(QString seedstr)
 {
-    auto var=QByteArray::fromHex(seedstr.toUtf8());
-    if(var.size()>=32&&var!=m_seed)
+
+    if(m_mnemonicMode)
     {
-        m_seed=var;
-        m_master=Master_key(m_seed);
-        emit Changed();
+        const auto stringList= seedstr.split(QChar::Space);
+        if(stringList.size()>11)
+        {
+            const auto mnemonic=Mnemonic<Language::en>(stringList);
+            if(mnemonic.isValid())
+            {
+                const auto varseed=mnemonic.getSeed();
+                if(varseed!=m_seed)
+                {
+                    m_seed=varseed;
+                    m_sentence=mnemonic.m_words.join(QChar::Space);
+                    m_master=Master_key(m_seed);
+                    emit changed();
+                }
+            }
+        }
     }
+    else
+    {
+        auto varseed=QByteArray::fromHex(seedstr.toUtf8());
+        if(varseed.size()>=32&&varseed!=m_seed)
+        {
+            m_seed=varseed;
+            m_master=Master_key(m_seed);
+            m_sentence=m_seed.toHex();
+            emit changed();
+        }
+    }
+
 }
-Account::Account(QObject *parent,QByteArray seed):QObject(parent),m_seed(seed),m_master(seed),m_path({44,4219})
+std::pair<QByteArray,QString> Account::setRandomSeed(){
+    const auto mnemonic=Mnemonic<Language::en>();
+
+    return std::make_pair(mnemonic.getSeed(),mnemonic.m_words.join(QChar::Space));
+}
+Account::Account(QObject *parent,std::pair<QByteArray,QString> mnemonicpair):QObject(parent),m_mnemonicMode(true),m_seed(mnemonicpair.first),m_master(mnemonicpair.first),m_sentence(mnemonicpair.second),m_path({44,4219})
 {
 
 }

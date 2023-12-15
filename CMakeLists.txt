@@ -22,6 +22,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
+FetchContent_Declare(
+        QBip39
+        GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
+        GIT_TAG explain
+        FIND_PACKAGE_ARGS 0.1 CONFIG
+        )
+FetchContent_MakeAvailable(QBip39)
 
 FetchContent_Declare(
     qslip10
@@ -78,7 +85,6 @@ if (Qt6_FOUND)
             VERSION 1.0
             QML_FILES
             "qml/AccountSettings.qml"
-            "qml/ShowSeed.qml"
             RESOURCE_PREFIX
             "/esterVtech.com/imports"
             OUTPUT_TARGETS out_targets_var
@@ -120,6 +126,7 @@ target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOUR
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
 target_link_libraries(account PUBLIC qslip10 qblock qbech32 qed25519)
+target_link_libraries(account PRIVATE QBip39::qbip39)
 
 install(TARGETS account
     EXPORT ${PROJECT_NAME}-config
