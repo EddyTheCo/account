@@ -25,7 +25,7 @@ if(BUILD_EXAMPLES)
 			IMPORT_PATH ${CMAKE_BINARY_DIR}
 			)
                 target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick IotaAccount::account qrCode::QtQrGen
-                $<$<STREQUAL:$<TARGET_PROPERTY:IotaAccount::account,TYPE>,STATIC_LIBRARY>:IotaAccount::account>
+                $<$<STREQUAL:$<TARGET_PROPERTY:IotaAccount::account,TYPE>,STATIC_LIBRARY>:IotaAccount::accountplugin>
                 $<$<STREQUAL:$<TARGET_PROPERTY:qrCode::QtQrGen,TYPE>,STATIC_LIBRARY>:qrCode::QtQrGenplugin>
             )
 
