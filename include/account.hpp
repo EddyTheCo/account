@@ -25,7 +25,6 @@ namespace qiota{
 using namespace qblocks;
 using namespace qcrypto;
 
-
 class ACCOU_EXPORT Account : public QObject
 {
     qcrypto::Master_key m_master;
@@ -46,6 +45,7 @@ class ACCOU_EXPORT Account : public QObject
     Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
 public:
     static Account* instance();
+    void setMnemonicMode(bool mode){if(mode!=m_mnemonicMode){m_mnemonicMode=mode;emit modeChanged();}}
 #if defined(USE_QML)
     static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
     {
