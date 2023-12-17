@@ -45,9 +45,9 @@ class ACCOU_EXPORT Account : public QObject
     static std::pair<QByteArray,QString> setRandomSeed();
     Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
 public:
-    ACCOU_EXPORT static Account* instance();
+    static Account* instance();
 #if defined(USE_QML)
-    ACCOU_EXPORT static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
     {
         return instance();
     }
