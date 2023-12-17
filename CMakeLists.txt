@@ -97,7 +97,7 @@ if (Qt6_FOUND)
     add_library(${PROJECT_NAME}::accountplugin ALIAS accountplugin)
 
     target_link_libraries(account PUBLIC Qt6::Gui Qt6::Quick)
-    target_compile_definitions(account PRIVATE WINDOWS_ACCOU USE_QML)
+    target_compile_definitions(account PRIVATE USE_QML)
     target_link_libraries(account PUBLIC EstervDesigns::SimpleStyle EstervDesigns::CustomControls
         $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::SimpleStyle,TYPE>,STATIC_LIBRARY>:EstervDesigns::SimpleStyleplugin>
         $<$<STREQUAL:$<TARGET_PROPERTY:EstervDesigns::CustomControls,TYPE>,STATIC_LIBRARY>:EstervDesigns::CustomControlsplugin>
@@ -121,7 +121,7 @@ endif(USE_QML)
 
 add_library(${PROJECT_NAME}::account ALIAS account)
 target_link_libraries(account PUBLIC Qt6::Core)
-
+target_compile_definitions(account PRIVATE WINDOWS_ACCOU)
 target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
@@ -167,9 +167,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CPACK_PACKAGE_CONTACT "estervtech")
     include(CTest)
     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${SEMVER}-${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}")
-    if(USE_THREADS)
-        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-MThread")
-    endif(USE_THREADS)
     include(CPack)
 endif()
 
