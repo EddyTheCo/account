@@ -31,7 +31,7 @@ class ACCOU_EXPORT Account : public QObject
     qcrypto::Master_key m_master;
     QByteArray m_seed;
     QVector<quint32> m_path;
-    ACCOU_EXPORT static Account * m_instance;
+    static Account * m_instance;
     QString m_sentence;
     bool m_mnemonicMode;
     Q_OBJECT
@@ -45,9 +45,9 @@ class ACCOU_EXPORT Account : public QObject
     static std::pair<QByteArray,QString> setRandomSeed();
     Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
 public:
-    static Account* instance();
+    ACCOU_EXPORT static Account* instance();
 #if defined(USE_QML)
-    static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    ACCOU_EXPORT static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
     {
         return instance();
     }
