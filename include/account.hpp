@@ -31,7 +31,7 @@ class ACCOU_EXPORT Account : public QObject
     qcrypto::Master_key m_master;
     QByteArray m_seed;
     QVector<quint32> m_path;
-    static Account * m_instance;
+    ACCOU_EXPORT static Account * m_instance;
     QString m_sentence;
     bool m_mnemonicMode;
     Q_OBJECT
