@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest,macos-latest,windows-latest]
         sharedLib: [true]
-        useThread: [true,false]
+        useThread: [false]
 
     uses: EddyTheCo/Common/.github/workflows/build-test-install.yml@v0.1.1
     permissions:
