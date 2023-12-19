@@ -49,7 +49,7 @@ FetchContent_MakeAvailable(qed25519)
 FetchContent_Declare(
     qblock
     GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
-    GIT_TAG improvements
+    GIT_TAG develop
     FIND_PACKAGE_ARGS 0.3 CONFIG
 )
 FetchContent_MakeAvailable(qblock)
