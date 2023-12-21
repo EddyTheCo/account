@@ -5,117 +5,118 @@ import Esterv.Iota.Account
 import Esterv.Styles.Simple
 
 
-ColumnLayout
+Frame
 {
     id:control
     property bool advancemode:false
-    RowLayout
+    ColumnLayout
     {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        spacing: 10
-        Label
+        anchors.fill: parent
+        RowLayout
         {
-            text:qsTr("Account settings")
-            elide:Text.ElideRight
-            horizontalAlignment: TextEdit.AlignLeft
-            verticalAlignment: TextEdit.AlignVCenter
             Layout.fillWidth: true
-        }
-        RoundButton
-        {
-            text: (control.advancemode)?qsTr("Advanced"):qsTr("Basic")
-            onClicked:
+            Layout.fillHeight: true
+            spacing: 5
+            Label
             {
-                control.advancemode=!control.advancemode;
-                Account.mnmonicMode=!control.advancemode;
-                seed_.text=showorrestore.restore?"":Account.seed;
-            }
-            flat:true
-        }
-
-
-    }
-    Frame
-    {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        ColumnLayout
-        {
-            anchors.fill: parent
-            RowLayout
-            {
-                Layout.fillHeight: true
+                text:qsTr("Account settings")
+                elide:Text.ElideRight
+                horizontalAlignment: TextEdit.AlignLeft
+                verticalAlignment: TextEdit.AlignVCenter
                 Layout.fillWidth: true
-                visible: control.advancemode
-                Label
+            }
+            RoundButton
+            {
+                text: (control.advancemode)?qsTr("Advanced"):qsTr("Basic")
+                onClicked:
                 {
-                    text:qsTr("Coin type:")
+                    control.advancemode=!control.advancemode;
+                    Account.mnmonicMode=!control.advancemode;
+                    seed_.text=showorrestore.restore?"":Account.seed;
                 }
-                SpinBox {
-                    value: Account.path[1]
-                    from:0
-                    to: 429496729 //fix this
-                    onValueChanged: Account.path[1]=value;
-                }
+                flat:true
             }
 
-            RowLayout
+
+        }
+        Frame
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            ColumnLayout
             {
-                Layout.fillWidth: true
-                Label
+                anchors.fill: parent
+                RowLayout
                 {
-                    text:control.advancemode?qsTr("Seed"):qsTr("Mnemonic sentence")
-                    elide:Text.ElideRight
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                }
-
-                TabBar {
-                    id:showorrestore
-                    property bool restore:false
-                    Layout.fillWidth: true
-
-                    TabButton {
-                        text: qsTr("Current")
-                        onClicked:
-                        {
-                            showorrestore.restore=false;
-                            seed_.text=Account.seed;
-                        }
+                    visible: control.advancemode
+                    Label
+                    {
+                        text:qsTr("Coin type:")
                     }
-                    TabButton {
-                        text: qsTr("Restore")
-                        onClicked:
-                        {
-
-                            showorrestore.restore=true;
-                            seed_.text="";
-                        }
-
+                    SpinBox {
+                        value: Account.path[1]
+                        from:0
+                        to: 429496729 //fix this
+                        onValueChanged: Account.path[1]=value;
                     }
                 }
-            }
-            TextArea
-            {
-                id:seed_
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumHeight: 50
-                Layout.minimumWidth:  100
-                Layout.alignment: Qt.AlignLeft || Qt.AlignVCenter
-                readOnly:!showorrestore.restore
 
-                wrapMode:Text.WrapAnywhere
-                inputMethodHints:Qt.ImhSensitiveData
-                text:Account.seed
-                onEditingFinished:
+                RowLayout
                 {
-                    Account.seed=seed_.text
+                    Layout.fillWidth: true
+
+                    TabBar {
+                        id:showorrestore
+                        property bool restore:false
+                        Layout.fillWidth: true
+
+                        TabButton {
+                            text: qsTr("Current")
+                            onClicked:
+                            {
+                                showorrestore.restore=false;
+                                seed_.text=Account.seed;
+                            }
+                        }
+                        TabButton {
+                            text: qsTr("Restore")
+                            onClicked:
+                            {
+
+                                showorrestore.restore=true;
+                                seed_.text="";
+                            }
+
+                        }
+                    }
                 }
-                placeholderText: control.advancemode?qsTr("e2f88a043776c828063..."):qsTr("ozone drill grab fiber ...")
+                TextArea
+                {
+                    id:seed_
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.minimumHeight: 50
+                    Layout.minimumWidth:  100
+                    Layout.maximumHeight: 100
+                    Layout.alignment: Qt.AlignLeft || Qt.AlignVCenter
+                    readOnly:!showorrestore.restore
+
+                    wrapMode:Text.WrapAnywhere
+                    inputMethodHints:Qt.ImhSensitiveData
+                    text:Account.seed
+                    onEditingFinished:
+                    {
+                        Account.seed=seed_.text
+                    }
+                    placeholderText: control.advancemode?qsTr("e2f88a043776c828063..."):qsTr("ozone drill grab fiber ...")
+                }
             }
         }
     }
+
+
 }
 
 
