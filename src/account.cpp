@@ -10,7 +10,13 @@ namespace qiota{
 Account* Account::m_instance=nullptr;
 Account* Account::instance()
 {
-    if (!m_instance) m_instance=new Account();
+    if (!m_instance)
+    {
+        m_instance=new Account();
+#if defined(USE_QML)
+        QJSEngine::setObjectOwnership(m_instance,QJSEngine::CppOwnership);
+#endif
+    }
     return m_instance;
 }
 
