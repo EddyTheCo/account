@@ -1,11 +1,16 @@
 #pragma once
-#include"qaddr_bundle.hpp"
-#include"crypto/qslip10.hpp"
 #include<QObject>
-#include<QJsonObject>
 #include<QString>
 #include<QByteArray>
-#include <QtQml/qqmlregistration.h>
+
+#include"crypto/qslip10.hpp"
+#include"block/qaddresses.hpp"
+#include"encoding/qbech32.hpp"
+
+
+#if defined(USE_QML)
+#include<QtQml>
+#endif
 
 #include <QtCore/QtGlobal>
 #if defined(WINDOWS_ACCOU)
@@ -13,54 +18,66 @@
 #else
 #define ACCOU_EXPORT Q_DECL_IMPORT
 #endif
-using namespace qiota;
-using namespace qiota::qblocks;
+
+namespace qiota{
+
+
+using namespace qblocks;
 using namespace qcrypto;
 
 class ACCOU_EXPORT Account : public QObject
 {
-	Q_OBJECT
+    qcrypto::Master_key m_master;
+    QByteArray m_seed;
+    QVector<quint32> m_path;
+    static Account * m_instance;
+    QString m_sentence;
+    bool m_mnemonicMode;
+    Q_OBJECT
+#if defined(USE_QML)
+    Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY changed)
+    Q_PROPERTY(bool  mnmonicMode MEMBER m_mnemonicMode NOTIFY modeChanged)
+    Q_PROPERTY(QVector<quint32> path MEMBER m_path NOTIFY changed)
+    QML_ELEMENT
+    QML_SINGLETON
+#endif
+    static std::pair<QByteArray,QString> setRandomSeed();
+    Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
+public:
+    static Account* instance();
+    void setMnemonicMode(bool mode){if(mode!=m_mnemonicMode){m_mnemonicMode=mode;emit modeChanged();}}
+#if defined(USE_QML)
+    static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    {
+        return instance();
+    }
+#endif
+    QString seed(void)const{return (m_mnemonicMode)?m_sentence:QString(m_seed.toHex());}
+    Q_INVOKABLE void setSeed(QString seedstr);
+    Q_INVOKABLE void setPath(const QVector<quint32>& path);
+    std::pair<QByteArray,QByteArray> getKeys(const QVector<quint32>& subpath); //(0,0,0)
+    std::shared_ptr<const Address> getAddr(const QVector<quint32> subpath)
+    {
+        return Address::Ed25519(QCryptographicHash::hash(getKeys(subpath).first,QCryptographicHash::Blake2b_256));
+    }
+    c_array getAddrArray(const QVector<quint32> subpath)
+    {
+        return getAddr(subpath)->addr();
+    }
+    Q_INVOKABLE QString getAddrHex(const QVector<quint32> subpath)
+    {
+        return getAddrArray(subpath).toHexString();
+    }
 
-		Q_PROPERTY(QString  seed READ seed WRITE set_seed NOTIFY seedChanged)
+    Q_INVOKABLE QString getAddrBech32(const QVector<quint32> subpath,QString hrp)
+    {
+        return qencoding::qbech32::Iota::encode(hrp,getAddrArray(subpath));
+    };
 
-		QML_ELEMENT
-		QML_SINGLETON
-
-	public:
-		Account(QObject *parent = nullptr);
-        static Account* instance(){return m_instance;};
-		QString seed(void)const{return QString(seed_.toHex());}
-		void set_seed(QString seedstr);
-        address_bundle get_addr(const QVector<quint32>& subpath); //(0,0,0)
-        Q_INVOKABLE QString addr(const QVector<quint32> subpath)
-		{return get_addr(subpath).get_address()->addr().toHexString();}
-        Q_INVOKABLE QString addr_bech32(const QVector<quint32> subpath,QString hrp)
-		{return get_addr(subpath).get_address_bech32(hrp);};
-        Q_INVOKABLE void set_path(const QVector<quint32>& path_m){path_=path_m;}
-        Q_INVOKABLE QJsonObject path_json(const QVector<quint32> subpath)
-		{
-			return get_addr(subpath).get_address()->get_Json();
-		};
-        Q_INVOKABLE QJsonObject bech32_json(const QString &bech32addr)
-		{
-			auto addr=qencoding::qbech32::Iota::decode(bech32addr);
-			if(addr.second.size())
-				return Address::from_array(addr.second)->get_Json();
-			return QJsonObject();
-		};
-        Q_INVOKABLE QString json_bech32(const QJsonValue &json_addr,const QString& hrp)
-		{
-			const auto addr=Address::from_(json_addr)->addr();
-			return qencoding::qbech32::Iota::encode(hrp,addr);
-		};
 signals:
-		void seedChanged();
-	private:
-		void set_random_seed(void);
-        Master_key master_;
-        QByteArray seed_;
-        QVector<quint32> path_;
-        static Account * m_instance;
+    void changed();
+    void modeChanged();
 
 };
 
+};
