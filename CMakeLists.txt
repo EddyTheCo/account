@@ -25,8 +25,8 @@ include(GNUInstallDirs)
 FetchContent_Declare(
         QBip39
         GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
-        GIT_TAG develop
-        FIND_PACKAGE_ARGS 0.1 CONFIG
+        GIT_TAG v0.2.0
+        FIND_PACKAGE_ARGS 0.2 CONFIG
         )
 FetchContent_MakeAvailable(QBip39)
 
@@ -49,7 +49,7 @@ FetchContent_MakeAvailable(qed25519)
 FetchContent_Declare(
     qblock
     GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
-    GIT_TAG develop
+    GIT_TAG v0.3.2
     FIND_PACKAGE_ARGS 0.3 CONFIG
 )
 FetchContent_MakeAvailable(qblock)
@@ -67,8 +67,8 @@ if(USE_QML)
     FetchContent_Declare(
         EstervDesigns
         GIT_REPOSITORY https://github.com/EddyTheCo/MyDesigns.git
-        GIT_TAG develop
-        FIND_PACKAGE_ARGS 1.0 CONFIG
+        GIT_TAG v1.1.0
+        FIND_PACKAGE_ARGS 1.1 CONFIG
     )
 FetchContent_MakeAvailable(EstervDesigns)
 find_package(Qt6 COMPONENTS Core Gui Quick)
