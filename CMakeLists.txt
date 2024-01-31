@@ -31,12 +31,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(QBip39)
 
 FetchContent_Declare(
-	qslip10
+	QtSlip10	
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-	GIT_TAG v0.0.2
-	FIND_PACKAGE_ARGS 0.0 CONFIG
+	GIT_TAG v0.1.0 
+	FIND_PACKAGE_ARGS 0.1 CONFIG  
 	)
-FetchContent_MakeAvailable(qslip10)
+FetchContent_MakeAvailable(QtSlip10)
 
 FetchContent_Declare(
 	qed25519
@@ -114,7 +114,7 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
-	target_link_libraries(account PUBLIC qslip10 qblock qbech32 qed25519)
+	target_link_libraries(account PUBLIC QtSlip10::qslip10 qblock qbech32 qed25519)
 	target_link_libraries(account PRIVATE QBip39::qbip39)
 
 	install(TARGETS account
