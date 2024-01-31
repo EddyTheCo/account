@@ -2,8 +2,6 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick
 import Esterv.Iota.Account
-import Esterv.Styles.Simple
-
 
 Frame
 {
