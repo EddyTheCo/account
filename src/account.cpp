@@ -52,15 +52,22 @@ void Account::setSeed(QString seedstr)
     }
     else
     {
-        auto varseed=QByteArray::fromHex(seedstr.toUtf8());
-        if(varseed.size()>=32&&varseed!=m_seed)
-        {
-            m_seed=varseed;
-            m_master=Master_key(m_seed);
-            m_sentence=m_seed.toHex();
-            emit changed();
-        }
+        auto seed=QByteArray::fromHex(seedstr.toUtf8());
+        setSeedfromRaw(seed);
     }
+
+}
+bool Account::setSeedfromRaw(QByteArray seed)
+{
+    if(seed.size()>=32&&seed!=m_seed)
+    {
+        m_seed=seed;
+        m_master=Master_key(m_seed);
+        m_sentence=m_seed.toHex();
+        emit changed();
+        return true;
+    }
+    return false;
 
 }
 std::pair<QByteArray,QString> Account::setRandomSeed(){
@@ -68,8 +75,31 @@ std::pair<QByteArray,QString> Account::setRandomSeed(){
 
     return std::make_pair(mnemonic.getSeed(),mnemonic.m_words.join(QChar::Space));
 }
-Account::Account(QObject *parent,std::pair<QByteArray,QString> mnemonicpair):QObject(parent),m_mnemonicMode(true),m_seed(mnemonicpair.first),m_master(mnemonicpair.first),m_sentence(mnemonicpair.second),m_path({44,4219})
+Account::Account(QObject *parent,std::pair<QByteArray,QString> mnemonicpair):QObject(parent),
+    m_mnemonicMode(true),
+    m_seed(mnemonicpair.first),
+    m_master(mnemonicpair.first),
+    m_sentence(mnemonicpair.second),
+    m_path({44,4219}),m_vault(new qutils::Vault(this))
 {
+    connect(m_vault,&qutils::Vault::isEmptyChanged,this,&Account::isVaultEmptyChanged);
+}
+bool Account::changeVaultPassword(QString oldPass,QString newPass)
+{
+    return m_vault->changePassword(oldPass,newPass);
+}
+bool Account::writeToVault(QString password)
+{
+    return m_vault->setData(m_seed,password.toUtf8());
+}
+bool Account::readFromVault(QString password)
+{
+    if(m_vault->isEmpty()) return false;
+
+    const auto seed=m_vault->getData(password.toUtf8());
+    m_mnemonicMode=false;
+
+    return setSeedfromRaw(seed);
 
 }
 std::pair<QByteArray,QByteArray> Account::getKeys(const QVector<quint32>& subpath)
