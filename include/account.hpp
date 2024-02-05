@@ -7,6 +7,7 @@
 #include"block/qaddresses.hpp"
 #include"encoding/qbech32.hpp"
 
+#include"vault.hpp"
 
 #if defined(USE_QML)
 #include<QtQml>
@@ -33,18 +34,28 @@ class ACCOU_EXPORT Account : public QObject
     static Account * m_instance;
     QString m_sentence;
     bool m_mnemonicMode;
+    qutils::Vault* m_vault;
+
     Q_OBJECT
 #if defined(USE_QML)
     Q_PROPERTY(QString  seed READ seed WRITE setSeed NOTIFY changed)
     Q_PROPERTY(bool  mnmonicMode MEMBER m_mnemonicMode NOTIFY modeChanged)
     Q_PROPERTY(QVector<quint32> path MEMBER m_path NOTIFY changed)
+    Q_PROPERTY(bool isVaultEmpty READ getIsVaultEmpty NOTIFY isVaultEmptyChanged)
     QML_ELEMENT
     QML_SINGLETON
 #endif
     static std::pair<QByteArray,QString> setRandomSeed();
+    bool setSeedfromRaw(QByteArray seed);
     Account(QObject *parent = nullptr, std::pair<QByteArray,QString> mnemonicpair=setRandomSeed());
 public:
     static Account* instance();
+    void setVaultFile(QString filename){m_vault->setFile(filename);};
+    bool getIsVaultEmpty()const{return m_vault->isEmpty();}
+    Q_INVOKABLE bool readFromVault(QString password);
+    Q_INVOKABLE bool writeToVault(QString password);
+    Q_INVOKABLE bool changeVaultPassword(QString oldPass,QString newPass);
+
     void setMnemonicMode(bool mode){if(mode!=m_mnemonicMode){m_mnemonicMode=mode;emit modeChanged();}}
 #if defined(USE_QML)
     static Account *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
@@ -77,6 +88,7 @@ public:
 signals:
     void changed();
     void modeChanged();
+    void isVaultEmptyChanged();
 
 };
 
