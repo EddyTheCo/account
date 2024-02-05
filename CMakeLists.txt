@@ -62,6 +62,13 @@ FetchContent_Declare(
 	)
 FetchContent_MakeAvailable(qbech32)
 
+FetchContent_Declare(
+        QtVault
+        GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
+        GIT_TAG v0.1.1
+        FIND_PACKAGE_ARGS 0.1 CONFIG
+        )
+FetchContent_MakeAvailable(QtVault)
 
 if(USE_QML)
 	find_package(Qt6 COMPONENTS Core Gui Quick)
@@ -78,6 +85,8 @@ if (Qt6_FOUND)
 			VERSION 1.0
 			QML_FILES
 			"qml/AccountSettings.qml"
+                        "qml/SetPassword.qml"
+                        "qml/ChangePassword.qml"
 			RESOURCE_PREFIX
 			"/esterVtech.com/imports"
 			OUTPUT_TARGETS out_targets_var
@@ -114,7 +123,7 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/${PROJECT_NAME}>")
 
-	target_link_libraries(account PUBLIC QtSlip10::qslip10 qblock qbech32 qed25519)
+        target_link_libraries(account PUBLIC QtSlip10::qslip10 qblock qbech32 qed25519 QtVault::vault)
 	target_link_libraries(account PRIVATE QBip39::qbip39)
 
 	install(TARGETS account

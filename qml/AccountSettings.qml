@@ -7,6 +7,38 @@ Frame
 {
     id:control
     property bool advancemode:false
+
+    Popup
+    {
+        id:checkpop
+        visible:false
+        closePolicy: Popup.CloseOnPressOutside
+        anchors.centerIn: Overlay.overlay
+
+        SetPassword
+        {
+            id:checkpassword
+            onSuccess:
+            {
+                seed_.text=Account.seed;
+                showorrestore.restore=false;
+                checkpop.close()
+            }
+        }
+    }
+    Popup
+    {
+        id:changepop
+        visible:false
+        closePolicy: Popup.CloseOnPressOutside
+        anchors.centerIn: Overlay.overlay
+        ChangePassword
+        {
+            id:changepassword
+            onSuccess:changepop.close()
+        }
+    }
+
     ColumnLayout
     {
         anchors.fill: parent
@@ -90,25 +122,64 @@ Frame
                         }
                     }
                 }
-                TextArea
-                {
-                    id:seed_
+                ScrollView {
+                    id: view
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.minimumHeight: 50
                     Layout.minimumWidth:  100
                     Layout.maximumHeight: 100
                     Layout.alignment: Qt.AlignLeft || Qt.AlignVCenter
-                    readOnly:!showorrestore.restore
-
-                    wrapMode:Text.WrapAnywhere
-                    inputMethodHints:Qt.ImhSensitiveData
-                    text:Account.seed
-                    onEditingFinished:
+                    TextArea
                     {
-                        Account.seed=seed_.text
+                        id:seed_
+
+                        readOnly:!showorrestore.restore
+
+                        wrapMode:Text.WrapAnywhere
+                        inputMethodHints:Qt.ImhSensitiveData
+                        text:Account.seed
+                        onEditingFinished:
+                        {
+                            Account.seed=seed_.text
+                        }
+                        placeholderText: control.advancemode?qsTr("e2f88a043776c828063..."):qsTr("ozone drill grab fiber ...")
                     }
-                    placeholderText: control.advancemode?qsTr("e2f88a043776c828063..."):qsTr("ozone drill grab fiber ...")
+                }
+                RowLayout
+                {
+                    Layout.alignment: Qt.AlignRight
+                    Button
+                    {
+                        Layout.margins: 5
+                        text:qsTr("Change password")
+                        visible: (!Account.isVaultEmpty&&!showorrestore.restore)
+                        onClicked:
+                        {
+                            changepop.open();
+                        }
+                    }
+                    Button
+                    {
+
+                        Layout.margins: 5
+                        text:qsTr((showorrestore.restore)?"From Vault":"Save To Vault")
+                        visible: ((showorrestore.restore&&!Account.isVaultEmpty)||!showorrestore.restore)
+                        onClicked:
+                        {
+                            if(showorrestore.restore)
+                            {
+                                checkpassword.isSet=false;
+                                checkpop.open();
+                            }
+                            else
+                            {
+                                checkpassword.isSet=true;
+                                checkpop.open();
+                            }
+                        }
+                    }
+
                 }
             }
         }

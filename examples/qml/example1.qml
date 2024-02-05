@@ -32,6 +32,10 @@ ApplicationWindow {
 
         AccountSettings
         {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
+            Layout.minimumWidth: 350
+            Layout.maximumWidth: 500
         }
         RowLayout
         {

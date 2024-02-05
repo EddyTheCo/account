@@ -2,7 +2,7 @@ if(BUILD_EXAMPLES)
     FetchContent_Declare(
             qrCode
             GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-            GIT_TAG develop
+            GIT_TAG main
             FIND_PACKAGE_ARGS 1.0 CONFIG
         )
     FetchContent_MakeAvailable(qrCode)
