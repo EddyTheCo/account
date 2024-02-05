@@ -14,6 +14,8 @@ Frame
         visible:false
         closePolicy: Popup.CloseOnPressOutside
         anchors.centerIn: Overlay.overlay
+        focus:true
+        modal:true
 
         SetPassword
         {
@@ -32,6 +34,8 @@ Frame
         visible:false
         closePolicy: Popup.CloseOnPressOutside
         anchors.centerIn: Overlay.overlay
+        focus:true
+        modal:true
         ChangePassword
         {
             id:changepassword
@@ -152,8 +156,12 @@ Frame
                     Button
                     {
                         Layout.margins: 5
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 150
                         text:qsTr("Change password")
                         visible: (!Account.isVaultEmpty&&!showorrestore.restore)
+                        ToolTip.text: text
+                        ToolTip.visible: hovered
                         onClicked:
                         {
                             changepop.open();
@@ -163,7 +171,11 @@ Frame
                     {
 
                         Layout.margins: 5
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 150
                         text:qsTr((showorrestore.restore)?"From Vault":"Save To Vault")
+                        ToolTip.text: text
+                        ToolTip.visible: hovered
                         visible: ((showorrestore.restore&&!Account.isVaultEmpty)||!showorrestore.restore)
                         onClicked:
                         {
