@@ -25,7 +25,7 @@ include(GNUInstallDirs)
 FetchContent_Declare(
 	QBip39
 	GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
-	GIT_TAG v0.2.0
+	GIT_TAG v0.2.1
 	FIND_PACKAGE_ARGS 0.2 CONFIG
 	)
 FetchContent_MakeAvailable(QBip39)
@@ -33,7 +33,7 @@ FetchContent_MakeAvailable(QBip39)
 FetchContent_Declare(
 	QtSlip10	
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-	GIT_TAG v0.1.0 
+	GIT_TAG v0.1.2 
 	FIND_PACKAGE_ARGS 0.1 CONFIG  
 	)
 FetchContent_MakeAvailable(QtSlip10)
@@ -65,7 +65,7 @@ FetchContent_MakeAvailable(qbech32)
 FetchContent_Declare(
         QtVault
         GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
-        GIT_TAG v0.1.1
+        GIT_TAG v0.1.2
         FIND_PACKAGE_ARGS 0.1 CONFIG
         )
 FetchContent_MakeAvailable(QtVault)
