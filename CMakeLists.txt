@@ -25,7 +25,7 @@ include(GNUInstallDirs)
 FetchContent_Declare(
 	QBip39
 	GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
-	GIT_TAG v0.2.0
+	GIT_TAG v0.2.1
 	FIND_PACKAGE_ARGS 0.2 CONFIG
 	)
 FetchContent_MakeAvailable(QBip39)
@@ -33,7 +33,7 @@ FetchContent_MakeAvailable(QBip39)
 FetchContent_Declare(
 	QtSlip10	
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-	GIT_TAG v0.1.0 
+	GIT_TAG v0.1.2 
 	FIND_PACKAGE_ARGS 0.1 CONFIG  
 	)
 FetchContent_MakeAvailable(QtSlip10)
@@ -65,7 +65,7 @@ FetchContent_MakeAvailable(qbech32)
 FetchContent_Declare(
         QtVault
         GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
-        GIT_TAG v0.1.1
+        GIT_TAG v0.1.2
         FIND_PACKAGE_ARGS 0.1 CONFIG
         )
 FetchContent_MakeAvailable(QtVault)
@@ -137,15 +137,14 @@ if (Qt6_FOUND)
 		)
 
 	install(EXPORT ${PROJECT_NAME}-config
-		FILE ${PROJECT_NAME}-config.cmake
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 		NAMESPACE ${PROJECT_NAME}::
 		COMPONENT ${PROJECT_NAME}
 		)
 	include(CMakePackageConfigHelpers)
 	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 		)
 	write_basic_package_version_file(
 		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
@@ -155,7 +154,7 @@ if (Qt6_FOUND)
 	install(FILES
 		${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
 		${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Esterv
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 		)
 	export(EXPORT ${PROJECT_NAME}-config
 		FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
