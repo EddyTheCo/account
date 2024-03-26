@@ -39,28 +39,28 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(QtSlip10)
 
 FetchContent_Declare(
-	qed25519
+	Qted25519
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
 	GIT_TAG use_IFW
 	FIND_PACKAGE_ARGS 0.0 CONFIG
 	)
-FetchContent_MakeAvailable(qed25519)
+FetchContent_MakeAvailable(Qted25519)
 
 FetchContent_Declare(
-	qblock
+	QtIotaBlock
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
 	GIT_TAG use_IFW
 	FIND_PACKAGE_ARGS 0.3 CONFIG
 	)
-FetchContent_MakeAvailable(qblock)
+FetchContent_MakeAvailable(QtIotaBlock)
 
 FetchContent_Declare(
-	qbech32
+	Qtbech32
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qbech32.git
 	GIT_TAG use_IFW
 	FIND_PACKAGE_ARGS 0.0 CONFIG
 	)
-FetchContent_MakeAvailable(qbech32)
+FetchContent_MakeAvailable(Qtbech32)
 
 FetchContent_Declare(
         QtVault
@@ -124,7 +124,7 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
 
-        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaPow::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
+        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaBlock::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
 	target_link_libraries(account PRIVATE QtBip39::qbip39)
 
 	install(TARGETS account
