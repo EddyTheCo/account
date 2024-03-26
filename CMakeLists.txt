@@ -124,8 +124,8 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
 
-        target_link_libraries(account PUBLIC QtSlip10::qslip10 qblock qbech32 qed25519 QtVault::vault)
-	target_link_libraries(account PRIVATE QBip39::qbip39)
+        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaPow::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
+	target_link_libraries(account PRIVATE QtBip39::qbip39)
 
 	install(TARGETS account
 		EXPORT ${PROJECT_NAME}-config
