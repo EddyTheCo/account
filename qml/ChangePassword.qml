@@ -32,6 +32,7 @@ ColumnLayout
         id:newpass
         Layout.fillWidth: true
         echoMode:TextInput.PasswordEchoOnEdit
+        inputMethodHints:Qt.ImhHiddenText|Qt.ImhSensitiveData|Qt.ImhNoAutoUppercase|Qt.ImhNoPredictiveText
     }
 
     Button

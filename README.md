@@ -1,5 +1,7 @@
 # Esterv.Iota.Account 
 
+[TOC]
+
 This repo implements a singleton called `Account` that can produce deterministic addresses from a seed.
 The seed can be given to the Singleton by binary seed or by Mnemonic sentences following
 [Bip-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
@@ -34,8 +36,8 @@ include(FetchContent)
 FetchContent_Declare(
 	IotaAccount	
 	GIT_REPOSITORY https://github.com/EddyTheCo/account.git
-	GIT_TAG main 
-	FIND_PACKAGE_ARGS 0.1 CONFIG  
+	GIT_TAG vMAJOR.MINOR.PATCH 
+	FIND_PACKAGE_ARGS MAJOR.MINOR CONFIG  
 	)
 FetchContent_MakeAvailable(IotaAccount)
 
