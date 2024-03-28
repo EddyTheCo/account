@@ -1,4 +1,5 @@
 if(BUILD_EXAMPLES)
+	find_package(Qt6 COMPONENTS Qml)
 	FetchContent_Declare(
 		qrCode
 		GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
@@ -36,7 +37,6 @@ if(BUILD_EXAMPLES)
 		install(TARGETS ${example} COMPONENT examples
 			BUNDLE  DESTINATION . COMPONENT examples
 			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-			
 			)
 		if(QTDEPLOY)
 			qt_generate_deploy_qml_app_script(
