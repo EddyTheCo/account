@@ -2,13 +2,13 @@ if(BUILD_EXAMPLES)
 	FetchContent_Declare(
 		qrCode
 		GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-		GIT_TAG main
-		FIND_PACKAGE_ARGS 1.0 CONFIG
+		GIT_TAG v1.1.0
+		FIND_PACKAGE_ARGS 1.1 CONFIG
 		)
 	FetchContent_MakeAvailable(qrCode)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS FlatControl CONFIG )
+		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS FlatControl CONFIG )
 	endif(EMSCRIPTEN OR ANDROID)
 
 	foreach(example "example1"
