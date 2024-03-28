@@ -71,7 +71,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(QtVault)
 
 if(USE_QML)
-	find_package(Qt6 COMPONENTS Core Gui Quick)
+	find_package(Qt6 COMPONENTS Core Gui Quick Qml)
 else()
 	find_package(Qt6 COMPONENTS Core)
 endif()

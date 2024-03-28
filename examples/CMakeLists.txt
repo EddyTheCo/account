@@ -1,5 +1,4 @@
 if(BUILD_EXAMPLES)
-	find_package(Qt6 COMPONENTS Qml)
 	FetchContent_Declare(
 		qrCode
 		GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
