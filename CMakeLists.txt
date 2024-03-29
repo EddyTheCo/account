@@ -115,7 +115,6 @@ if (Qt6_FOUND)
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/Iota/Account
 			COMPONENT account
 			)
-
 	endif(USE_QML)
 
 	add_library(${PROJECT_NAME}::account ALIAS account)
@@ -148,5 +147,5 @@ endif(Qt6_FOUND)
 
 if(BUILD_DOCS)
 	build_docs()
-endif()
+endif(BUILD_DOCS)
 
