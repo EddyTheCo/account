@@ -22,6 +22,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(GNUInstallDirs)
+
+if(USE_QML)
+	find_package(Qt6 COMPONENTS Core Gui Quick Qml)
+else()
+	find_package(Qt6 COMPONENTS Core)
+endif()
+
+
 FetchContent_Declare(
 	QtBip39	
 	GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
@@ -70,11 +78,6 @@ FetchContent_Declare(
         )
 FetchContent_MakeAvailable(QtVault)
 
-if(USE_QML)
-	find_package(Qt6 COMPONENTS Core Gui Quick Qml)
-else()
-	find_package(Qt6 COMPONENTS Core)
-endif()
 
 if (Qt6_FOUND)
 	qt_standard_project_setup()
