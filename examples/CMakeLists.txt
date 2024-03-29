@@ -1,17 +1,17 @@
 if(BUILD_EXAMPLES)
-    FetchContent_Declare(
-            qrCode
-            GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-            GIT_TAG main
-            FIND_PACKAGE_ARGS 1.0 CONFIG
-        )
-    FetchContent_MakeAvailable(qrCode)
+	FetchContent_Declare(
+		qrCode
+		GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
+		GIT_TAG v1.1.0
+		FIND_PACKAGE_ARGS 1.1 CONFIG
+		)
+	FetchContent_MakeAvailable(qrCode)
 	if(EMSCRIPTEN OR ANDROID)
 		find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-		find_package(EstervDesigns 0.4 REQUIRED COMPONENTS FlatControl CONFIG )
+		find_package(EstervDesigns 1.2 REQUIRED COMPONENTS FlatControl CONFIG )
 	endif(EMSCRIPTEN OR ANDROID)
 
-        foreach(example "example1"
+	foreach(example "example1"
 			)
 		qt_add_executable(${example} ${example}.cpp )
 
@@ -24,18 +24,17 @@ if(BUILD_EXAMPLES)
 			"/esterVtech.com/imports"
 			IMPORT_PATH ${CMAKE_BINARY_DIR}
 			)
-                target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick IotaAccount::account qrCode::QtQrGen
-                $<$<STREQUAL:$<TARGET_PROPERTY:IotaAccount::account,TYPE>,STATIC_LIBRARY>:IotaAccount::accountplugin>
-                $<$<STREQUAL:$<TARGET_PROPERTY:qrCode::QtQrGen,TYPE>,STATIC_LIBRARY>:qrCode::QtQrGenplugin>
-            )
+		target_link_libraries(${example} PRIVATE Qt::Gui Qt::Qml Qt::Quick account qrCode::QtQrGen
+			$<$<STREQUAL:$<TARGET_PROPERTY:account,TYPE>,STATIC_LIBRARY>:accountplugin>
+			$<$<STREQUAL:$<TARGET_PROPERTY:qrCode::QtQrGen,TYPE>,STATIC_LIBRARY>:qrCode::QtQrGenplugin>
+			)
 
 		set_target_properties(${example} PROPERTIES
 			WIN32_EXECUTABLE ON
 			MACOSX_BUNDLE ON
 			)
-		install(TARGETS ${example}
-			BUNDLE  DESTINATION .
-			DESTINATION ${CMAKE_INSTALL_BINDIR}
+		install(TARGETS ${example} COMPONENT examples
+			BUNDLE  DESTINATION . COMPONENT examples
 			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			)
 		if(QTDEPLOY)
@@ -43,7 +42,7 @@ if(BUILD_EXAMPLES)
 				TARGET ${example}
 				OUTPUT_SCRIPT deploy_script
 				)
-			install(SCRIPT ${deploy_script})
+			install(SCRIPT ${deploy_script} COMPONENT examples)
 		endif(QTDEPLOY)
 		if(ANDROID)
 			set_property(TARGET ${example} APPEND PROPERTY QT_ANDROID_MIN_SDK_VERSION 30)
@@ -59,7 +58,7 @@ if(BUILD_EXAMPLES)
 			if(NOT android_openssl_POPULATED)
 				FetchContent_Populate(android_openssl)
 				include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
-                                add_android_openssl_libraries(${example})
+				add_android_openssl_libraries(${example})
 			endif(NOT android_openssl_POPULATED)
 
 		endif(ANDROID)

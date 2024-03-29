@@ -36,7 +36,7 @@ void Account::setSeed(QString seedstr)
         const auto stringList= seedstr.split(QChar::Space);
         if(stringList.size()>11)
         {
-            const auto mnemonic=Mnemonic<Language::en>(stringList);
+            const auto mnemonic=Mnemonic<Language::En>(stringList);
             if(mnemonic.isValid())
             {
                 const auto varseed=mnemonic.getSeed();
@@ -71,7 +71,7 @@ bool Account::setSeedfromRaw(QByteArray seed)
 
 }
 std::pair<QByteArray,QString> Account::setRandomSeed(){
-    const auto mnemonic=Mnemonic<Language::en>();
+    const auto mnemonic=Mnemonic<Language::En>();
 
     return std::make_pair(mnemonic.getSeed(),mnemonic.m_words.join(QChar::Space));
 }
