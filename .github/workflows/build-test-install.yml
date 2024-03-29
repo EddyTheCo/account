@@ -17,7 +17,8 @@ jobs:
     with:
       os: ${{ matrix.os }}
       qtVersion: '6.6.0'
-      cmakeArgs: " -DQTDEPLOY=ON -DBUILD_EXAMPLES=ON -DCPACK_PACKAGE_CONTACT=estervtech@gmail.com -DREPO_URL=https://eddytheco.github.io/account -DCPACK_PACKAGE_VENDOR=estervtech" 
+      cmakeArgs: " -DQTDEPLOY=ON -DBUILD_EXAMPLES=ON -DCPACK_PACKAGE_CONTACT=estervtech@gmail.com -DREPO_URL=https://eddytheco.github.io/account -DCPACK_PACKAGE_VENDOR=estervtech"
+      qtModules: 'qtshadertools'
       test: false
   
   build_doxygen:
