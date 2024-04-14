@@ -1,8 +1,9 @@
 if(BUILD_EXAMPLES)
+	include(InstallRequiredSystemLibraries)
 	FetchContent_Declare(
 		qrCode
 		GIT_REPOSITORY https://github.com/EddyTheCo/qrCode.git
-		GIT_TAG v1.1.0
+		GIT_TAG develop
 		FIND_PACKAGE_ARGS 1.1 CONFIG
 		)
 	FetchContent_MakeAvailable(qrCode)

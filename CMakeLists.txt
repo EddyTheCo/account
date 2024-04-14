@@ -7,7 +7,7 @@ include(FetchContent)
 FetchContent_Declare(
 	ccommon
 	GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
-	GIT_TAG v0.3.0
+	GIT_TAG v0.3.1
 	)
 FetchContent_MakeAvailable(ccommon)
 version_from_git(
@@ -31,25 +31,25 @@ endif()
 
 
 FetchContent_Declare(
-	QtBip39	
+	QtBip39
 	GIT_REPOSITORY https://github.com/EddyTheCo/QBip39.git
-	GIT_TAG v0.3.0
+	GIT_TAG develop
 	FIND_PACKAGE_ARGS 0.3 CONFIG
 	)
 FetchContent_MakeAvailable(QtBip39)
 
 FetchContent_Declare(
-	QtSlip10	
+	QtSlip10
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qslip10.git
-	GIT_TAG v0.2.0
-	FIND_PACKAGE_ARGS 0.2 CONFIG  
+	GIT_TAG develop
+	FIND_PACKAGE_ARGS 0.2 CONFIG
 	)
 FetchContent_MakeAvailable(QtSlip10)
 
 FetchContent_Declare(
 	Qted25519
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qed25519.git
-	GIT_TAG v0.1.0 
+	GIT_TAG develop
 	FIND_PACKAGE_ARGS 0.1 CONFIG
 	)
 FetchContent_MakeAvailable(Qted25519)
@@ -57,7 +57,7 @@ FetchContent_MakeAvailable(Qted25519)
 FetchContent_Declare(
 	QtIotaBlock
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
-	GIT_TAG v0.4.0
+	GIT_TAG develop
 	FIND_PACKAGE_ARGS 0.4 CONFIG
 	)
 FetchContent_MakeAvailable(QtIotaBlock)
@@ -65,17 +65,17 @@ FetchContent_MakeAvailable(QtIotaBlock)
 FetchContent_Declare(
 	Qtbech32
 	GIT_REPOSITORY https://github.com/EddyTheCo/Qbech32.git
-	GIT_TAG v0.1.0
+	GIT_TAG develop
 	FIND_PACKAGE_ARGS 0.1 CONFIG
 	)
 FetchContent_MakeAvailable(Qtbech32)
 
 FetchContent_Declare(
-        QtVault
-        GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
-	GIT_TAG v0.2.0
-        FIND_PACKAGE_ARGS 0.2 CONFIG
-        )
+	QtVault
+	GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
+	GIT_TAG develop
+	FIND_PACKAGE_ARGS 0.2 CONFIG
+	)
 FetchContent_MakeAvailable(QtVault)
 
 
@@ -89,8 +89,8 @@ if (Qt6_FOUND)
 			VERSION 1.0
 			QML_FILES
 			"qml/AccountSettings.qml"
-                        "qml/SetPassword.qml"
-                        "qml/ChangePassword.qml"
+			"qml/SetPassword.qml"
+			"qml/ChangePassword.qml"
 			RESOURCE_PREFIX
 			"/esterVtech.com/imports"
 			OUTPUT_TARGETS out_targets_var
@@ -108,6 +108,7 @@ if (Qt6_FOUND)
 			EXPORT ${PROJECT_NAME}-config
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			COMPONENT account
+			RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT account
 			)
 		install(DIRECTORY ${CMAKE_BINARY_DIR}/Esterv/Iota/Account
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/Iota
@@ -117,6 +118,7 @@ if (Qt6_FOUND)
 			EXPORT ${PROJECT_NAME}-config
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}/Esterv/Iota/Account
 			COMPONENT account
+			RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT account
 			)
 	endif(USE_QML)
 
@@ -126,13 +128,14 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
 
-        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaBlock::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
+	target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaBlock::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
 	target_link_libraries(account PRIVATE QtBip39::qbip39)
 
 	install(TARGETS account
 		EXPORT ${PROJECT_NAME}-config
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		COMPONENT account
+		RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT account
 		)
 	install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esterv
