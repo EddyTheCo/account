@@ -7,14 +7,14 @@ include(FetchContent)
 FetchContent_Declare(
 	ccommon
 	GIT_REPOSITORY https://github.com/EddyTheCo/Common.git
-	GIT_TAG v0.3.0
+	GIT_TAG v0.4.1
 	)
 FetchContent_MakeAvailable(ccommon)
 version_from_git(
 	LOG       OFF
 	TIMESTAMP "%Y%m%d%H%M%S"
 	)
-project(IotaAccount VERSION ${VERSION} DESCRIPTION "Iota account methods " LANGUAGES CXX)
+project(EstervAccount VERSION ${VERSION} DESCRIPTION "Crypto account methods " LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -55,12 +55,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Qted25519)
 
 FetchContent_Declare(
-	QtIotaBlock
-	GIT_REPOSITORY https://github.com/EddyTheCo/Qblock-IOTA.git
-	GIT_TAG v0.4.0
+	EstervBlock
+	GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Crypto.Block.git
+	GIT_TAG basic_Output2
 	FIND_PACKAGE_ARGS 0.4 CONFIG
 	)
-FetchContent_MakeAvailable(QtIotaBlock)
+FetchContent_MakeAvailable(EstervBlock)
 
 FetchContent_Declare(
 	Qtbech32
@@ -71,12 +71,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Qtbech32)
 
 FetchContent_Declare(
-        QtVault
-        GIT_REPOSITORY https://github.com/EddyTheCo/QVault.git
-	GIT_TAG v0.2.0
+        EstervVault
+        GIT_REPOSITORY https://github.com/EddyTheCo/Esterv.Crypto.Vault.git
+        GIT_TAG develop
         FIND_PACKAGE_ARGS 0.2 CONFIG
         )
-FetchContent_MakeAvailable(QtVault)
+FetchContent_MakeAvailable(EstervVault)
 
 
 if (Qt6_FOUND)
@@ -126,7 +126,7 @@ if (Qt6_FOUND)
 	target_include_directories(account PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esterv/>")
 
-        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaBlock::qblock Qtbech32::qbech32 Qted25519::qed25519 QtVault::qvault)
+        target_link_libraries(account PUBLIC QtSlip10::qslip10 QtIotaBlock::qblock Qtbech32::qbech32 Qted25519::qed25519 Esterv::vault)
 	target_link_libraries(account PRIVATE QtBip39::qbip39)
 
 	install(TARGETS account

@@ -20,11 +20,10 @@
 #define ACCOU_EXPORT Q_DECL_IMPORT
 #endif
 
-namespace qiota{
+namespace Esterv::Crypto{
 
 
 using namespace qblocks;
-using namespace qcrypto;
 
 class ACCOU_EXPORT Account : public QObject
 {
@@ -34,7 +33,7 @@ class ACCOU_EXPORT Account : public QObject
     static Account * m_instance;
     QString m_sentence;
     bool m_mnemonicMode;
-    qutils::Vault* m_vault;
+    Vault *m_vault;
 
     Q_OBJECT
 #if defined(USE_QML)

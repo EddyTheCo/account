@@ -1,20 +1,20 @@
-#include"account.hpp"
+#include "account.hpp"
 #include <QCryptographicHash>
 #include <QRandomGenerator>
-#include"crypto/qed25519.hpp"
-#include"crypto/qbip39.hpp"
+#include "crypto/qbip39.hpp"
+#include "crypto/qed25519.hpp"
 
-namespace qiota{
+namespace Esterv::Crypto{
 
 
-Account* Account::m_instance=nullptr;
-Account* Account::instance()
+Account *Account::m_instance = nullptr;
+Account *Account::instance()
 {
     if (!m_instance)
     {
         m_instance=new Account();
 #if defined(USE_QML)
-        QJSEngine::setObjectOwnership(m_instance,QJSEngine::CppOwnership);
+        QJSEngine::setObjectOwnership(m_instance, QJSEngine::CppOwnership);
 #endif
     }
     return m_instance;
@@ -75,14 +75,16 @@ std::pair<QByteArray,QString> Account::setRandomSeed(){
 
     return std::make_pair(mnemonic.getSeed(),mnemonic.m_words.join(QChar::Space));
 }
-Account::Account(QObject *parent,std::pair<QByteArray,QString> mnemonicpair):QObject(parent),
-    m_mnemonicMode(true),
-    m_seed(mnemonicpair.first),
-    m_master(mnemonicpair.first),
-    m_sentence(mnemonicpair.second),
-    m_path({44,4219}),m_vault(new qutils::Vault(this))
+Account::Account(QObject *parent, std::pair<QByteArray, QString> mnemonicpair)
+    : QObject(parent)
+    , m_mnemonicMode(true)
+    , m_seed(mnemonicpair.first)
+    , m_master(mnemonicpair.first)
+    , m_sentence(mnemonicpair.second)
+    , m_path({44, 4219})
+    , m_vault(new Vault(this))
 {
-    connect(m_vault,&qutils::Vault::isEmptyChanged,this,&Account::isVaultEmptyChanged);
+    connect(m_vault, &Vault::isEmptyChanged, this, &Account::isVaultEmptyChanged);
 }
 bool Account::changeVaultPassword(QString oldPass,QString newPass)
 {
